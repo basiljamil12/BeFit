@@ -1,6 +1,28 @@
 import UsersDAO from "../dao/userDAO.js";
 
 export default class UserController {
+
+  static async apiGetUsers(req, res, next) {
+        
+    let filters = {}
+    if (req.query.username) {
+        filters.username = req.query.username.toLowerCase()
+    } else if (req.query.name) {
+        filters.name = req.query.name.toLowerCase()
+    }
+
+    const { usersList, totalNumUser } = await UsersDAO.getUsers ({
+        filters,
+    })
+
+    let response = {
+        users: usersList,
+        filters: filters,
+        total_results: totalNumUser,
+    }
+    res.json(response)
+}
+
   static async apiGetUserID(req, res, next) {
     const email = req.query.email;
     const password = req.query.password;
