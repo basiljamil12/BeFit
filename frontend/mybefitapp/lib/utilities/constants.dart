@@ -5,7 +5,6 @@ class Constants {
       'url': startingIp,
       'userList': '$startingIp/userprofile',
     };
-
     return factoryConstant;
   }
 }
