@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mybefitapp/views/homescreen_view.dart';
 import 'package:mybefitapp/views/login_view.dart';
+import 'package:mybefitapp/views/register_view.dart';
+import 'package:mybefitapp/utilities/constant_routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,6 +19,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.pink,
       ),
       home: const LoginView(),
+      routes: {
+        registerview: (context) => const RegisterView(),
+        homeScreen: (context) => const HomePage(),
+      },
     );
   }
 }
