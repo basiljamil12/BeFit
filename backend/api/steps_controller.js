@@ -5,6 +5,7 @@ export default class UserController {
           
       let filters = {}
       if (req.query.id) {
+        filters.steps=req.body.steps;
         filters.id = req.query.id;
       }
   

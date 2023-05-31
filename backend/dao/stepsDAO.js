@@ -24,13 +24,12 @@ export default class StepsDAO {
       }
     }
     let cursor;
-
     try {
       if (!steps) {
         throw new Error("Steps collection is undefined");
       }
-
-      cursor = await steps.aggregate([query, match]).toArray();
+    
+      cursor = await steps.find(query);
     } catch (e) {
       console.error(`Unable to issue find command, ${e}`);
       return { stepsList: [], totalNumSteps: 0 };

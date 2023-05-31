@@ -2,6 +2,7 @@ import app from "./server.js"
 import mongodb from "mongodb"
 import dotenv from "dotenv"
 import UsersDAO from './dao/userDAO.js'
+import StepsDAO from "./dao/stepsDAO.js"
 
 dotenv.config()
 
@@ -22,6 +23,7 @@ MongoClient.connect(
     process.exit(1)
 })
 .then(async client => {
+    await StepsDAO.injectDB(client)
     await UsersDAO.injectDB(client)
     app.listen(port, () => {
         console.log(`listening on port ${port}`)
