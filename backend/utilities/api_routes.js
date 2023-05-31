@@ -13,7 +13,7 @@ router
 
 router
     .route("/userprofile")
-    .get(UserControl.apiGetUserID)
+    .get(UserControl.apiGetUsers)
     .post(UserControl.apiPostUser)
     .put(UserControl.apiPutUser)
     .delete(UserControl.apiDeleteUser)

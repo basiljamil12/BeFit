@@ -15,6 +15,38 @@ export default class UsersDAO {
     }
   }
 
+  static async getUsers({
+    filters = null,
+  } = {}){
+    let query
+    if (filters) {
+      if ("name" in filters){
+        query = {$text: {$search: filters["name"]}}
+      } else if ("username" in filters) {
+        query = {"username": {$eq: filters["username"]}}
+      }
+    }
+    let cursor
+
+    try {
+      cursor = await users.find(query)
+    } catch (e) {
+      console.error(`Unable to issue find command, ${e}`)
+      return { usersList: [], totalNumUser: 0 }
+    }
+    try{
+      const usersList = await cursor.toArray()
+      const totalNumUser = await users.countDocuments(query)
+
+      return { usersList, totalNumUser }
+  } catch (e) {
+      console.error(
+          `Unable to convert cursor to array or problem counting documents, ${e}`
+      )
+      return { usersList: [], totalNumUser: 0 }
+  }
+  }
+
   static async getUserID(email, password) {
     let cursor;
     try {
