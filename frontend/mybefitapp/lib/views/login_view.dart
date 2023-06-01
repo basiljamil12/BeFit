@@ -31,6 +31,29 @@ class _LoginViewState extends State<LoginView> {
     super.dispose();
   }
 
+  Future<UserModel> postData(UserModel userModel) async {
+    try {
+      Map<String, dynamic> constants = Constants.getConstant();
+      String postUrl = constants['userList'];
+
+      var response = await http.post(
+        Uri.parse(postUrl),
+        body: userModel.toJson(),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        var r = json.decode(response.body);
+        return UserModel.fromJson(r);
+      } else {
+        throw Exception(
+            'HTTP request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,10 +101,13 @@ class _LoginViewState extends State<LoginView> {
                   final password = _password.text;
                   try {
                     //YOU DID NOT INTIALIZE FIREBASE DUMBASS
-                    //await AuthService.firebase()
-                    //  .logIn(email: email, password: password);
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil(homeScreen, (route) => false);
+                    await AuthService.firebase()
+                        .logIn(email: email, password: password);
+                    final user = AuthService.firebase().currentUser;
+                    if (user != null) {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          homeScreen, (route) => false);
+                    }
                   } catch (e) {
                     print(e);
                   }

@@ -42,6 +42,7 @@ class UserModel {
       'name': name,
       'gender': gender,
       'dob': dob?.millisecondsSinceEpoch,
+      'email': email,
     };
   }
 
@@ -54,6 +55,7 @@ class UserModel {
       dob: map['dob'] != null
           ? DateTime.fromMillisecondsSinceEpoch(map['dob'] as int)
           : null,
+      email: map['email'] != null ? map['email'] as String : null,
     );
   }
 
@@ -61,7 +63,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(username: $username, password: $password, name: $name, gender: $gender, dob: $dob)';
+    return 'UserModel(username: $username, password: $password, name: $name, gender: $gender, dob: $dob, email: $email)';
   }
 
   @override
@@ -72,7 +74,8 @@ class UserModel {
         other.password == password &&
         other.name == name &&
         other.gender == gender &&
-        other.dob == dob;
+        other.dob == dob &&
+        other.email == email;
   }
 
   @override
@@ -81,6 +84,7 @@ class UserModel {
         password.hashCode ^
         name.hashCode ^
         gender.hashCode ^
-        dob.hashCode;
+        dob.hashCode ^
+        email.hashCode;
   }
 }
