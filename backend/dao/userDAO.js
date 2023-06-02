@@ -77,7 +77,7 @@ export default class UsersDAO {
   static async updateUser(username, password, name, gender, dob, email) {
     try {
       const updateResponse = await users.updateOnne(
-        { _id: ObjectId(id) },
+        { _id: new ObjectId(id) },
         {
           $set: {
             username: username,
@@ -97,7 +97,7 @@ export default class UsersDAO {
   }
   static async deleteUser(id) {
     try {
-      const deleteResponse = await users.deleteOne({ _id: ObjectId(id) });
+      const deleteResponse = await users.deleteOne({ _id: new ObjectId(id) });
       return deleteResponse;
     } catch (e) {
       console.error(`Unable to delete a user: ${e}`);
