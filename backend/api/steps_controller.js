@@ -1,3 +1,4 @@
+import { Int32 } from "mongodb";
 import StepsDAO from "../dao/stepsDAO.js";
 export default class UserController {
 
@@ -5,7 +6,7 @@ export default class UserController {
           
       let filters = {}
       if (req.query.id) {
-        filters.steps=req.body.steps;
+        filters.steps=req.body.steps
         filters.id = req.query.id;
       }
   
@@ -23,14 +24,14 @@ export default class UserController {
   
     static async apiPostSteps(req, res, next) {
       try {
-        const steps= req.body.steps;
+        const steps= new Int32(req.body.steps);
         const date= req.body.date;
-        const userid= req.query.userid;
+        const email= req.query.email;
   
         await StepsDAO.addSteps(
-            steps,
+          new Int32(steps),
             date,
-            userid
+            email
         );
         res.json({ Status: "Success" });
       } catch (e) {
@@ -39,14 +40,15 @@ export default class UserController {
     }
     static async apiPutSteps(req, res, next) {
       try {
-        const steps= req.body.steps;
+        const steps= new Int32(req.body.steps);
         const date= req.body.date;
-        const userid= req.query.userid;
+        const email= req.query.email;
   
         const userResponse = await StepsDAO.updateSteps(
-            steps,
+          req.query.id,
+          new Int32(steps),
             date,
-            userid
+            email
         );
         var { error } = userResponse;
         if (error) {

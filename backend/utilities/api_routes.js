@@ -1,6 +1,7 @@
 import express from "express"
 import UserControl from "../api/user_controller.js"
 import StepsControl from "../api/steps_controller.js"
+import bodyMeasureControl from "../api/bodymeasurements_controller.js"
 import { RouterProvider } from "react-router-dom"
 
 //all the routes will be placed in this file
@@ -24,5 +25,12 @@ router
     .get(StepsControl.apiGetStepsByID)
     .post(StepsControl.apiPostSteps)
     .put(StepsControl.apiPutSteps)
+
+    router
+    .route("/measurements")
+    .get(bodyMeasureControl.apiGetMeasurementsByID)
+    .post(bodyMeasureControl.apiPostMeasurements)
+    .put(bodyMeasureControl.apiPutMeasurements)
+    .delete(bodyMeasureControl.apiDeleteMeasurements)
 
 export default router

@@ -1,17 +1,17 @@
-import mongodb from "mongodb";
+import mongodb, { Int32 } from "mongodb";
 const ObjectId = mongodb.ObjectId;
 
-let steps;
+let Steps;
 
 export default class StepsDAO {
   static async injectDB(conn) {
-    if (steps) {
+    if (Steps) {
       return;
     }
     try {
-      steps = await conn.db(process.env.MONGO_NS).collection("Steps");
+      Steps = await conn.db(process.env.MONGO_NS).collection("Steps");
     } catch (e) {
-      console.error(`Unable to establish a collection handle in userDAO: ${e}`);
+      console.error(`Unable to establish a collection handle in stepsDAO: ${e}`);
     }
   }
 
@@ -20,16 +20,16 @@ export default class StepsDAO {
     let query;
     if (filters) {
       if ("id" in filters) {
-        match = { $match: { userid: new ObjectId(filters["id"]) } };
+        match = { $match: { email: filters["id"] } };
       }
     }
     let cursor;
     try {
-      if (!steps) {
+      if (!Steps) {
         throw new Error("Steps collection is undefined");
       }
     
-      cursor = await steps.find(query);
+      cursor = await Steps.find(query);
     } catch (e) {
       console.error(`Unable to issue find command, ${e}`);
       return { stepsList: [], totalNumSteps: 0 };
@@ -37,7 +37,7 @@ export default class StepsDAO {
 
     try {
       const stepsList = await cursor.toArray();
-      const totalNumSteps = stepsList.length;
+      const totalNumSteps =  await Steps.countDocuments(query);
 
       return { stepsList, totalNumSteps };
     } catch (e) {
@@ -48,35 +48,35 @@ export default class StepsDAO {
     }
   }
 
-  static async addSteps(steps, date, userid) {
+  static async addSteps(steps, date, email) {
     try {
       const stepsDoc = {
-        steps: Number(steps),
-        date: date.toISOString(),
-        userid: ObjectId(userid),
+        steps: new Int32(steps),
+        date: date,
+        email: email,
       };
-      return await steps.insertOne(stepsDoc);
+      return await Steps.insertOne(stepsDoc);
     } catch (e) {
-      console.error(`Unable to add a user: ${e}`);
+      console.error(`Unable to add steps: ${e}`);
       return { Error: e };
     }
   }
 
-  static async updateSteps(id, steps, date, userid) {
+  static async updateSteps(id, steps, date, email) {
     try {
-      const updateResponse = await steps.updateOne(
-        { _id: ObjectId(id) },
+      const updateResponse = await Steps.updateOne(
+        { _id: new ObjectId(id) },
         {
           $set: {
-            steps: Number(steps),
-            date: date.toISOString(),
-            userid: ObjectId(userid),
+            steps: new Int32(steps),
+            date: date,
+            email: email,
           },
         }
       );
       return updateResponse;
     } catch (e) {
-      console.error(`Unable to update a user: ${e}`);
+      console.error(`Unable to update steps: ${e}`);
       return { Error: e };
     }
   }
