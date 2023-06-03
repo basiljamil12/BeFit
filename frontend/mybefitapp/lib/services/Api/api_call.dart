@@ -4,10 +4,10 @@ import 'package:mybefitapp/utilities/constants.dart';
 
 import 'package:http/http.dart' as http;
 
-//Map<String, dynamic> constants = Constants.getConstant();
-//     String postUrl = constants['postUrl'];
-
 const String baseUrl = 'http://192.168.100.2:5000';
+
+Map<String, dynamic> constants = Constants.getConstant();
+String postUrl = constants['url'];
 
 class BaseClient {
   var client = http.Client();
@@ -25,9 +25,7 @@ class BaseClient {
   }
 
   Future<dynamic> postUserApi(dynamic object) async {
-    //Map<String, dynamic> constants = Constants.getConstant();
-    //String postUrl = constants['postUrl'];
-    var uri = Uri.parse('$baseUrl/userprofile');
+    var uri = Uri.parse('$postUrl/userprofile');
     var payload = userModelToJson(object);
     var headers = {
       'Content-Type': 'application/json',

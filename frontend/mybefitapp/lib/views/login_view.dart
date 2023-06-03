@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:mybefitapp/model/user_model.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/utilities/constant_routes.dart';
-import 'package:mybefitapp/utilities/constants.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -29,29 +25,6 @@ class _LoginViewState extends State<LoginView> {
     _email.dispose();
     _password.dispose();
     super.dispose();
-  }
-
-  Future<UserModel> postData(UserModel userModel) async {
-    try {
-      Map<String, dynamic> constants = Constants.getConstant();
-      String postUrl = constants['userList'];
-
-      var response = await http.post(
-        Uri.parse(postUrl),
-        body: userModel.toJson(),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        var r = json.decode(response.body);
-        return UserModel.fromJson(r);
-      } else {
-        throw Exception(
-            'HTTP request failed with status: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Error: $e');
-    }
   }
 
   @override
@@ -95,12 +68,9 @@ class _LoginViewState extends State<LoginView> {
               const SizedBox(height: 24.0),
               ElevatedButton(
                 onPressed: () async {
-                  //NEEDS TO BE FIXED, DOES NOT WORK CURRENTLY (REMOVE WHEN FIXED)
-                  //CREATE REGISTER VIEW FIRST
                   final email = _email.text;
                   final password = _password.text;
                   try {
-                    //YOU DID NOT INTIALIZE FIREBASE DUMBASS
                     await AuthService.firebase()
                         .logIn(email: email, password: password);
                     final user = AuthService.firebase().currentUser;

@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:mybefitapp/model/user_model.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
-import 'package:mybefitapp/services/auth/auth_user.dart';
-import 'package:mybefitapp/utilities/constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mybefitapp/utilities/constant_routes.dart';
 
 import '../services/Api/api_call.dart';
 
@@ -24,6 +19,18 @@ class _RegisterViewState extends State<RegisterView> {
   late final TextEditingController _name;
   late final TextEditingController _gender;
   late final TextEditingController _dob;
+
+  Future<bool> fireBaseSignin() async {
+    final email = _email.text;
+    final password = _password.text;
+    try {
+      await AuthService.firebase().createUser(email: email, password: password);
+      return true;
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
 
   @override
   void initState() {
@@ -154,19 +161,12 @@ class _RegisterViewState extends State<RegisterView> {
                         context: context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime(1950),
-                        //DateTime.now() - not to allow to choose before today.
                         lastDate: DateTime(2100));
 
                     if (pickedDate != null) {
-                      print(
-                          pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                      String formattedDate =
-                          DateFormat('yyyy-MM-dd').format(pickedDate);
-                      print(
-                          formattedDate); //formatted date output using intl package =>  2021-03-16
+                      String formattedDate = pickedDate.toUtc().toString();
                       setState(() {
-                        _dob.text =
-                            formattedDate; //set output date to TextField value.
+                        _dob.text = formattedDate;
                       });
                     } else {}
                   },
@@ -174,28 +174,23 @@ class _RegisterViewState extends State<RegisterView> {
                 const SizedBox(height: 24.0),
                 ElevatedButton(
                   onPressed: () async {
-                    //final email = _email.text;
-                    //final password = _password.text;
                     try {
-                      //await AuthService.firebase()
-                      //    .createUser(email: email, password: password);
-                      UserModel user = createUserModel();
-                      var response = await BaseClient()
-                          .postUserApi(user)
-                          .catchError((e) {});
-                      if (response == null) return;
-                      print('user created');
+                      final isTrue = await fireBaseSignin();
+                      if (isTrue) {
+                        UserModel user = createUserModel();
+                        var response = await BaseClient()
+                            .postUserApi(user)
+                            .catchError((e) {});
+                        if (response == null) return;
+                        await AuthService.firebase().logOut();
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            loginScreen, (route) => false);
+                      }
                     } catch (e) {
                       print(e);
                     }
                   },
                   child: const Text('REGISTER'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    await AuthService.firebase().logOut();
-                  },
-                  child: const Text('Logout'),
                 ),
                 const SizedBox(height: 80.0), // Add extra spacing at the bottom
               ],
