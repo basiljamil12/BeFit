@@ -1,10 +1,12 @@
+// To parse this JSON data, do
+//
+//     final welcome = welcomeFromJson(jsonString);
+
 import 'dart:convert';
 
-List<UserModel> todoFromJson(String str) =>
-    List<UserModel>.from(json.decode(str).map((x) => UserModel.fromJson(x)));
+UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 
-String todoToJson(List<UserModel> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String userModelToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
   String? id;
@@ -12,17 +14,18 @@ class UserModel {
   String password;
   String name;
   String gender;
-  String dob;
+  DateTime dob;
   String email;
 
-  UserModel(
-      {this.id,
-      required this.username,
-      required this.password,
-      required this.name,
-      required this.gender,
-      required this.dob,
-      required this.email});
+  UserModel({
+    this.id,
+    required this.username,
+    required this.password,
+    required this.name,
+    required this.gender,
+    required this.dob,
+    required this.email,
+  });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["_id"],
@@ -30,7 +33,7 @@ class UserModel {
         password: json["password"],
         name: json["name"],
         gender: json["gender"],
-        dob: json["dob"], //DateTime.parse(json["dob"]),
+        dob: DateTime.parse(json["dob"]),
         email: json["email"],
       );
 
@@ -39,7 +42,7 @@ class UserModel {
         "password": password,
         "name": name,
         "gender": gender,
-        "dob": dob, //dob.toUtc().toString(),
-        "email": email
+        "dob": dob.toUtc().toString(),
+        "email": email,
       };
 }

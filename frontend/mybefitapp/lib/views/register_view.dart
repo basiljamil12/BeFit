@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:mybefitapp/model/user_model.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/services/auth/auth_user.dart';
 import 'package:mybefitapp/utilities/constants.dart';
-import 'package:intl/intl.dart';
-import 'package:mybefitapp/services/Api/api_call.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../services/Api/api_call.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -46,6 +47,24 @@ class _RegisterViewState extends State<RegisterView> {
     super.dispose();
   }
 
+  UserModel createUserModel() {
+    String email = _email.text;
+    String password = _password.text;
+    String username = _username.text;
+    String name = _name.text;
+    String gender = _gender.text;
+    DateTime dob = DateTime.parse(_dob.text);
+
+    return UserModel(
+      email: email,
+      password: password,
+      username: username,
+      name: name,
+      gender: gender,
+      dob: dob,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,6 +96,7 @@ class _RegisterViewState extends State<RegisterView> {
                   autocorrect: false,
                   decoration: const InputDecoration(
                     hintText: 'Username',
+                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -87,6 +107,7 @@ class _RegisterViewState extends State<RegisterView> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     hintText: 'Email',
+                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -97,6 +118,7 @@ class _RegisterViewState extends State<RegisterView> {
                   obscureText: true,
                   decoration: const InputDecoration(
                     hintText: 'Password',
+                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -106,6 +128,7 @@ class _RegisterViewState extends State<RegisterView> {
                   autocorrect: false,
                   decoration: const InputDecoration(
                     hintText: 'Name',
+                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -115,62 +138,51 @@ class _RegisterViewState extends State<RegisterView> {
                   autocorrect: false,
                   decoration: const InputDecoration(
                     hintText: 'Gender',
+                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16.0),
-                // TextField(
-                //   controller: _dob,
-                //   decoration: const InputDecoration(
-                //     icon: Icon(Icons.calendar_today),
-                //     hintText: "Enter Date",
-                //   ),
-                //   readOnly: true,
-                //   onTap: () async {
-                //     DateTime? pickedDate = await showDatePicker(
-                //         context: context,
-                //         initialDate: DateTime.now(),
-                //         firstDate: DateTime(1950),
-                //         lastDate: DateTime(2100));
+                TextField(
+                  controller: _dob,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.calendar_today),
+                    hintText: 'Date of Birth',
+                  ),
+                  readOnly: true,
+                  onTap: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1950),
+                        //DateTime.now() - not to allow to choose before today.
+                        lastDate: DateTime(2100));
 
-                //     if (pickedDate != null) {
-                //       print(pickedDate);
-                //       String formattedDate =
-                //           DateFormat('yyyy-MM-dd').format(pickedDate);
-                //       print(formattedDate);
-                //       setState(() {
-                //         _dob.text = formattedDate;
-                //       });
-                //     } else {}
-                //   },
-                // ),
+                    if (pickedDate != null) {
+                      print(
+                          pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                      String formattedDate =
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
+                      print(
+                          formattedDate); //formatted date output using intl package =>  2021-03-16
+                      setState(() {
+                        _dob.text =
+                            formattedDate; //set output date to TextField value.
+                      });
+                    } else {}
+                  },
+                ),
                 const SizedBox(height: 24.0),
                 ElevatedButton(
                   onPressed: () async {
-                    final email = _email.text;
-                    final password = _password.text;
-
+                    //final email = _email.text;
+                    //final password = _password.text;
                     try {
                       //await AuthService.firebase()
                       //    .createUser(email: email, password: password);
-                      final username = _username.text;
-                      final password = _password.text;
-                      final name = _name.text;
-                      final gender = _gender.text;
-                      const dob = "a";
-                      final email = _email.text;
-                      final user = UserModel(
-                        username: username,
-                        password: password,
-                        name: name,
-                        gender: gender,
-                        dob: dob,
-                        email: email,
-                      );
-                      print(user.dob);
+                      UserModel user = createUserModel();
                       var response = await BaseClient()
-                          .postUserApi('/userprofile', user)
+                          .postUserApi(user)
                           .catchError((e) {});
-                      print(response);
                       if (response == null) return;
                       print('user created');
                     } catch (e) {
