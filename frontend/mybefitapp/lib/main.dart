@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mybefitapp/services/auth/auth_user.dart';
 import 'package:mybefitapp/views/homescreen_view.dart';
+import 'package:mybefitapp/views/login.dart';
 import 'package:mybefitapp/views/login_view.dart';
 import 'package:mybefitapp/views/register_view.dart';
 import 'package:mybefitapp/utilities/constant_routes.dart';

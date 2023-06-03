@@ -65,7 +65,7 @@ export default class UsersDAO {
         password: password,
         name: name,
         gender: gender,
-        dob: dob.toISOString(),
+        dob: dob,
         email: email,
       };
       return await users.insertOne(userDoc);

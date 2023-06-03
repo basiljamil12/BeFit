@@ -5,6 +5,8 @@ import 'package:mybefitapp/model/user_model.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/services/auth/auth_user.dart';
 import 'package:mybefitapp/utilities/constants.dart';
+import 'package:intl/intl.dart';
+import 'package:mybefitapp/services/Api/api_call.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterView extends StatefulWidget {
@@ -44,49 +46,6 @@ class _RegisterViewState extends State<RegisterView> {
     super.dispose();
   }
 
-  UserModel createUserModel() {
-    String email = _email.text;
-    String password = _password.text;
-    String username = _username.text;
-    String name = _name.text;
-    String gender = _gender.text;
-    DateTime? dob = DateTime.tryParse(_dob.text);
-
-    return UserModel(
-      email: email,
-      password: password,
-      username: username,
-      name: name,
-      gender: gender,
-      dob: dob,
-    );
-  }
-
-  Future<UserModel> postData() async {
-    try {
-      UserModel user = createUserModel();
-
-      Map<String, dynamic> constants = Constants.getConstant();
-      String postUrl = constants['postUrl'];
-
-      var response = await http.post(
-        Uri.parse(postUrl),
-        body: user.toJson(),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        var r = json.decode(response.body);
-        return UserModel.fromJson(r);
-      } else {
-        throw Exception(
-            'HTTP request failed with status: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Error: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +77,6 @@ class _RegisterViewState extends State<RegisterView> {
                   autocorrect: false,
                   decoration: const InputDecoration(
                     hintText: 'Username',
-                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -129,7 +87,6 @@ class _RegisterViewState extends State<RegisterView> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     hintText: 'Email',
-                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -140,7 +97,6 @@ class _RegisterViewState extends State<RegisterView> {
                   obscureText: true,
                   decoration: const InputDecoration(
                     hintText: 'Password',
-                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -150,7 +106,6 @@ class _RegisterViewState extends State<RegisterView> {
                   autocorrect: false,
                   decoration: const InputDecoration(
                     hintText: 'Name',
-                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -160,28 +115,64 @@ class _RegisterViewState extends State<RegisterView> {
                   autocorrect: false,
                   decoration: const InputDecoration(
                     hintText: 'Gender',
-                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16.0),
-                TextField(
-                  controller: _dob,
-                  enableSuggestions: false,
-                  autocorrect: false,
-                  decoration: const InputDecoration(
-                    hintText: 'Date of Birth',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
+                // TextField(
+                //   controller: _dob,
+                //   decoration: const InputDecoration(
+                //     icon: Icon(Icons.calendar_today),
+                //     hintText: "Enter Date",
+                //   ),
+                //   readOnly: true,
+                //   onTap: () async {
+                //     DateTime? pickedDate = await showDatePicker(
+                //         context: context,
+                //         initialDate: DateTime.now(),
+                //         firstDate: DateTime(1950),
+                //         lastDate: DateTime(2100));
+
+                //     if (pickedDate != null) {
+                //       print(pickedDate);
+                //       String formattedDate =
+                //           DateFormat('yyyy-MM-dd').format(pickedDate);
+                //       print(formattedDate);
+                //       setState(() {
+                //         _dob.text = formattedDate;
+                //       });
+                //     } else {}
+                //   },
+                // ),
                 const SizedBox(height: 24.0),
                 ElevatedButton(
                   onPressed: () async {
                     final email = _email.text;
                     final password = _password.text;
+
                     try {
-                      await AuthService.firebase()
-                          .createUser(email: email, password: password);
-                      await postData();
+                      //await AuthService.firebase()
+                      //    .createUser(email: email, password: password);
+                      final username = _username.text;
+                      final password = _password.text;
+                      final name = _name.text;
+                      final gender = _gender.text;
+                      const dob = "a";
+                      final email = _email.text;
+                      final user = UserModel(
+                        username: username,
+                        password: password,
+                        name: name,
+                        gender: gender,
+                        dob: dob,
+                        email: email,
+                      );
+                      print(user.dob);
+                      var response = await BaseClient()
+                          .postUserApi('/userprofile', user)
+                          .catchError((e) {});
+                      print(response);
+                      if (response == null) return;
+                      print('user created');
                     } catch (e) {
                       print(e);
                     }

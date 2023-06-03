@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mybefitapp/model/user_model.dart';
 import 'package:mybefitapp/utilities/constants.dart';
+import 'package:mybefitapp/services/Api/api_call.dart';
 
 //THIS IS A TEST PAGE DO NOT TOUCH IT
 
@@ -14,28 +15,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late Future<UserModel> _userData;
+  late Future<dynamic> _userData;
 
   @override
   void initState() {
     super.initState();
-    _userData = getData();
-  }
-
-  Future<UserModel> getData() async {
-    try {
-      Map<String, dynamic> constants = Constants.getConstant();
-      String userList = constants['userList'];
-      var res = await http.get(Uri.parse(userList));
-      if (res.statusCode == 200) {
-        var r = json.decode(res.body);
-        return UserModel.fromJson(r);
-      } else {
-        throw Exception('HTTP request failed with status: ${res.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Error: $e');
-    }
+    _userData = BaseClient().getUserApi('userprofile');
   }
 
   @override
@@ -45,15 +30,14 @@ class _LoginPageState extends State<LoginPage> {
         title: const Text('Login'),
       ),
       body: Center(
-        child: FutureBuilder<UserModel>(
+        child: FutureBuilder<dynamic>(
           future: _userData,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final model = snapshot.data!;
               return Column(
                 children: <Widget>[
-                  Text(model.name ?? 'a'),
-                  Text(model.username ?? 'a'),
+                  Text(model),
                 ],
               );
             } else if (snapshot.hasError) {
