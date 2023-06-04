@@ -15,13 +15,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'BeFit',
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
       home: const Redirect(),
       routes: {
-        registerview: (context) => const RegisterView(),
+        registerScreen: (context) => const RegisterView(),
         homeScreen: (context) => const HomePage(),
         loginScreen: (context) => const LoginView(),
       },

@@ -32,76 +32,136 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Login',
-                style: TextStyle(
-                  fontSize: 35.0,
-                  color: Colors.pink,
-                ),
-              ),
-              const SizedBox(height: 32.0),
-              TextField(
-                controller: _email,
-                autocorrect: false,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  hintText: 'Email',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              TextField(
-                controller: _password,
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 24.0),
-              ElevatedButton(
-                onPressed: () async {
-                  final email = _email.text;
-                  final password = _password.text;
-                  try {
-                    await AuthService.firebase()
-                        .logIn(email: email, password: password);
-                    final user = AuthService.firebase().currentUser;
-                    if (user != null) {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          homeScreen, (route) => false);
-                    }
-                  } catch (e) {
-                    print(e);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    children: const [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Welcome to BeFit',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 35.0,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Sign into your account.',
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                child: const Text('LOGIN'),
-              ),
-              const SizedBox(height: 16.0),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(registerview);
-                },
-                style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                  const SizedBox(height: 32.0),
+                  TextField(
+                    controller: _email,
+                    autocorrect: false,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      hintText: 'Email',
+                      // focusedBorder: const OutlineInputBorder(
+                      //     borderSide: BorderSide(color: Colors.white)),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          width: 3,
+                          color: Colors.pinkAccent,
+                        ),
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                    ),
                   ),
-                ),
-                child: const Text('Not registered? Register now!'),
+                  const SizedBox(height: 16.0),
+                  TextField(
+                    controller: _password,
+                    obscureText: true,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          width: 3,
+                          color: Colors.pinkAccent,
+                        ),
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24.0),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(colors: [
+                        Colors.redAccent,
+                        Colors.pinkAccent,
+                      ]),
+                      borderRadius: BorderRadius.circular(50.0),
+                      boxShadow: const <BoxShadow>[
+                        BoxShadow(
+                            color: Color.fromRGBO(
+                                0, 0, 0, 0.30), //shadow for button
+                            blurRadius: 5)
+                      ],
+                    ), //blur radius of shadow),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final email = _email.text;
+                        final password = _password.text;
+                        try {
+                          await AuthService.firebase()
+                              .logIn(email: email, password: password);
+                          final user = AuthService.firebase().currentUser;
+                          if (user != null) {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                homeScreen, (route) => false);
+                          }
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        disabledForegroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        minimumSize: const Size(150, 60),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                      ),
+                      child: const Text(
+                        'Sign in',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(registerScreen);
+                    },
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    child: ShaderMask(
+                        shaderCallback: (bounds) => const LinearGradient(
+                              colors: [Colors.red, Colors.pinkAccent],
+                            ).createShader(bounds),
+                        child: const Text('Not registered? Sign up now!')),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
