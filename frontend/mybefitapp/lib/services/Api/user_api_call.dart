@@ -4,18 +4,16 @@ import 'package:mybefitapp/utilities/constants.dart';
 
 import 'package:http/http.dart' as http;
 
-const String baseUrl = 'http://192.168.100.2:5000';
-
 Map<String, dynamic> constants = Constants.getConstant();
-String postUrl = constants['url'];
+String baseURL = constants['url'];
 
-class BaseClient {
+class BaseUserClient {
   var client = http.Client();
 
   //user data
 
   Future<dynamic> getUserApi(String api) async {
-    var uri = Uri.parse('$postUrl/userprofile');
+    var uri = Uri.parse('$baseURL/userprofile?id=$api');
     var response = await client.get(uri);
     if (response.statusCode == 200) {
       return response.body;
@@ -25,7 +23,7 @@ class BaseClient {
   }
 
   Future<dynamic> postUserApi(dynamic object) async {
-    var uri = Uri.parse('$postUrl/userprofile');
+    var uri = Uri.parse('$baseURL/userprofile');
     var payload = userModelToJson(object);
     var headers = {
       'Content-Type': 'application/json',
@@ -38,9 +36,9 @@ class BaseClient {
     }
   }
 
-  Future<dynamic> putUserApi(String api, dynamic object) async {
-    var uri = Uri.parse(baseUrl + api);
-    var payload = json.encode(object);
+  Future<dynamic> putUserApi(dynamic object, String api) async {
+    var uri = Uri.parse('$baseURL/userprofile?id=$api');
+    var payload = userModelToJson(object);
     var headers = {
       'Content-Type': 'application/json',
     };
@@ -53,7 +51,7 @@ class BaseClient {
   }
 
   Future<dynamic> deleteUserApi(String api) async {
-    var uri = Uri.parse(baseUrl + api);
+    var uri = Uri.parse('$baseURL/userprofile?id=$api');
     var response = await client.delete(uri);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return response.body;

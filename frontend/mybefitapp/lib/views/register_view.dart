@@ -3,7 +3,7 @@ import 'package:mybefitapp/model/user_model.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/utilities/constant_routes.dart';
 
-import '../services/Api/api_call.dart';
+import '../services/Api/user_api_call.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -239,7 +239,7 @@ class _RegisterViewState extends State<RegisterView> {
                           final isTrue = await fireBaseSignin();
                           if (isTrue) {
                             UserModel user = createUserModel();
-                            var response = await BaseClient()
+                            var response = await BaseUserClient()
                                 .postUserApi(user)
                                 .catchError((e) {});
                             if (response == null) return;

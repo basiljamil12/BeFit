@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:mybefitapp/services/auth/auth_service.dart';
-import 'package:mybefitapp/services/auth/auth_user.dart';
-import 'package:mybefitapp/utilities/app_styles.dart';
+import 'dart:convert';
 
-import '../../services/Api/api_call.dart';
+import 'package:flutter/material.dart';
+import 'package:mybefitapp/services/Api/step_api_call.dart';
+import 'package:mybefitapp/services/auth/auth_service.dart';
+import 'package:mybefitapp/utilities/app_styles.dart';
+import 'package:pedometer/pedometer.dart';
+import '../../services/Api/user_api_call.dart';
 
 class MainHome extends StatefulWidget {
   const MainHome({super.key});
@@ -13,14 +15,16 @@ class MainHome extends StatefulWidget {
 }
 
 class _MainHomeState extends State<MainHome> {
-  AuthUser? _user;
   late Future<dynamic> _userData;
+  late Future<dynamic> _stepData;
 
   @override
   void initState() {
     super.initState();
     // Retrieve the current user when the widget initializes
-    _userData = BaseClient().getUserApi("weird@gmail.com");
+    String email = AuthService.firebase().currentUser?.email.toString() ?? '';
+    _userData = BaseUserClient().getUserApi(email);
+    _stepData = BaseStepClient().getStepApi(email);
   }
 
   @override
@@ -34,34 +38,36 @@ class _MainHomeState extends State<MainHome> {
               const SizedBox(
                 height: 50,
               ),
-              const Padding(
-                padding: EdgeInsets.all(20.0),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
                 child: Center(
-                  child: Text(
-                    'Welcome, Diyan Ali Shaikh',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                  child: FutureBuilder(
+                    future: _userData,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final model = snapshot.data!;
+                        Map<String, dynamic> jsonData = json.decode(model);
+                        List<dynamic> users = jsonData['users'];
+                        String name = users[0]['name'];
+                        return Text(
+                          'Welcome, $name',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20.0),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
+                    },
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Row(
-                  children: [
+                  children: const [
                     Center(
-                      // child: FutureBuilder(
-                      //   future: _userData,
-                      //   builder: (context, snapshot) {
-                      //     if (snapshot.hasData) {
-                      //       final model = snapshot.data!;
-                      //       return Text(model);
-                      //     } else if (snapshot.hasError) {
-                      //       return Text('Error: ${snapshot.error}');
-                      //     } else {
-                      //       return const CircularProgressIndicator();
-                      //     }
-                      //   },
-                      // ),
                       child: Text(
                         'Today',
                         style: TextStyle(
@@ -82,11 +88,33 @@ class _MainHomeState extends State<MainHome> {
                             BorderRadius.circular(20.0), // set border radius
                       ),
                       padding: const EdgeInsets.all(10.0),
-                      child: const ListTile(
+                      child: ListTile(
                         leading: Icon(Icons.local_fire_department_rounded),
-                        title: Text('Steps'),
-                        subtitle: Text('a'),
-                        trailing: Icon(Icons.arrow_right),
+                        title: const Text('Steps'),
+                        subtitle: FutureBuilder(
+                          future: _stepData,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final model = snapshot.data!;
+                              Map<String, dynamic> jsonData =
+                                  json.decode(model);
+                              List<dynamic> forSteps = jsonData['steps'];
+                              String stepsCount =
+                                  forSteps[0]['steps'].toString();
+                              return Text(
+                                stepsCount,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
+                          },
+                        ),
+                        trailing: const Icon(Icons.arrow_right),
                       ),
                     ),
                     const SizedBox(height: 15),
@@ -106,17 +134,17 @@ class _MainHomeState extends State<MainHome> {
                     ),
                   ],
                 ),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  await AuthService.firebase().logOut();
+                },
+                child: const Text('logout'),
               )
             ],
           ),
         ),
       ),
     );
-    // ElevatedButton(
-    //   onPressed: () async {
-    //     await AuthService.firebase().logOut();
-    //   },
-    //   child: const Text('logout'),
-    // );
   }
 }

@@ -4,6 +4,8 @@ class Constants {
     final factoryConstant = {
       'url': startingIp,
       'userList': '$startingIp/userprofile',
+      'stepList': '$startingIp/steps',
+      'bodyList': '$startingIp/measurements',
     };
     return factoryConstant;
   }

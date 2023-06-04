@@ -27,16 +27,20 @@ class UserModel {
     required this.email,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-        id: json["_id"],
-        username: json["username"],
-        password: json["password"],
-        name: json["name"],
-        gender: json["gender"],
-        dob: DateTime.parse(json["dob"]),
-        email: json["email"],
-      );
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    var users = json['users'] as List<dynamic>;
+    var user = users.first;
 
+    return UserModel(
+      id: user["_id"],
+      username: user["username"],
+      password: user["password"],
+      name: user["name"],
+      gender: user["gender"],
+      dob: DateTime.parse(user["dob"]),
+      email: user["email"],
+    );
+  }
   Map<String, dynamic> toJson() => {
         "username": username,
         "password": password,

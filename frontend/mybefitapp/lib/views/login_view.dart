@@ -3,10 +3,10 @@ import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/utilities/constant_routes.dart';
 
 class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+  const LoginView({Key? key}) : super(key: key);
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  _LoginViewState createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
@@ -29,34 +29,43 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    const aspectRatio = 16 / 12; // Replace with your image's aspect ratio
+    final imageHeight = screenWidth / aspectRatio;
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Padding(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: screenWidth,
+              height: imageHeight,
+              child: Image.asset(
+                'assets/image.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 16),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Welcome to BeFit',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 35.0,
-                          ),
+                      Text(
+                        'Welcome to BeFit',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 35.0,
                         ),
                       ),
                       SizedBox(height: 8),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Sign into your account.',
-                        ),
+                      Text(
+                        'Sign into your account.',
                       ),
                     ],
                   ),
@@ -67,8 +76,6 @@ class _LoginViewState extends State<LoginView> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       hintText: 'Email',
-                      // focusedBorder: const OutlineInputBorder(
-                      //     borderSide: BorderSide(color: Colors.white)),
                       border: OutlineInputBorder(
                         borderSide: const BorderSide(
                           width: 3,
@@ -96,73 +103,83 @@ class _LoginViewState extends State<LoginView> {
                     ),
                   ),
                   const SizedBox(height: 24.0),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(colors: [
-                        Colors.redAccent,
-                        Colors.pinkAccent,
-                      ]),
-                      borderRadius: BorderRadius.circular(50.0),
-                      boxShadow: const <BoxShadow>[
-                        BoxShadow(
-                            color: Color.fromRGBO(
-                                0, 0, 0, 0.30), //shadow for button
-                            blurRadius: 5)
-                      ],
-                    ), //blur radius of shadow),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final email = _email.text;
-                        final password = _password.text;
-                        try {
-                          await AuthService.firebase()
-                              .logIn(email: email, password: password);
-                          final user = AuthService.firebase().currentUser;
-                          if (user != null) {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                homeScreen, (route) => false);
-                          }
-                        } catch (e) {
-                          print(e);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        disabledForegroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        minimumSize: const Size(150, 60),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
+                  Center(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(colors: [
+                          Colors.redAccent,
+                          Colors.pinkAccent,
+                        ]),
+                        borderRadius: BorderRadius.circular(50.0),
+                        boxShadow: const <BoxShadow>[
+                          BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, 0.30),
+                            blurRadius: 5,
+                          ),
+                        ],
                       ),
-                      child: const Text(
-                        'Sign in',
-                        style: TextStyle(
-                          fontSize: 20,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          final email = _email.text;
+                          final password = _password.text;
+                          try {
+                            await AuthService.firebase().logIn(
+                              email: email,
+                              password: password,
+                            );
+                            final user = AuthService.firebase().currentUser;
+                            if (user != null) {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                homeScreen,
+                                (route) => false,
+                              );
+                            }
+                          } catch (e) {
+                            print(e);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          disabledForegroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          minimumSize: const Size(150, 60),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50.0),
+                          ),
+                        ),
+                        child: const Text(
+                          'Sign in',
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(registerScreen);
-                    },
-                    style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(registerScreen);
+                      },
+                      style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      child: ShaderMask(
+                        shaderCallback: (bounds) => const LinearGradient(
+                          colors: [Colors.red, Colors.pinkAccent],
+                        ).createShader(bounds),
+                        child: const Text('Not registered? Sign up now!'),
                       ),
                     ),
-                    child: ShaderMask(
-                        shaderCallback: (bounds) => const LinearGradient(
-                              colors: [Colors.red, Colors.pinkAccent],
-                            ).createShader(bounds),
-                        child: const Text('Not registered? Sign up now!')),
                   ),
                 ],
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
