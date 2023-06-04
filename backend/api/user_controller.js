@@ -5,10 +5,9 @@ export default class UserController {
   static async apiGetUsers(req, res, next) {
         
     let filters = {}
-    if (req.query.username) {
-        filters.username = req.query.username.toLowerCase()
-    } else if (req.query.name) {
-        filters.name = req.query.name.toLowerCase()
+    if (req.query.id) {
+       filters.email=req.body.email
+        filters.id = req.query.id;
     }
 
     const { usersList, totalNumUser } = await UsersDAO.getUsers ({

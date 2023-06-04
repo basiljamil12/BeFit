@@ -14,13 +14,12 @@ export default class StepsDAO {
       console.error(`Unable to establish a collection handle in stepsDAO: ${e}`);
     }
   }
-
+  
   static async getstepsByID({ filters = null } = {}) {
     let match;
-    let query;
     if (filters) {
       if ("id" in filters) {
-        match = { $match: { email: filters["id"] } };
+        match = { email: filters["id"] };
       }
     }
     let cursor;
@@ -29,7 +28,7 @@ export default class StepsDAO {
         throw new Error("Steps collection is undefined");
       }
     
-      cursor = await Steps.find(query);
+      cursor = await Steps.find(match);
     } catch (e) {
       console.error(`Unable to issue find command, ${e}`);
       return { stepsList: [], totalNumSteps: 0 };
@@ -37,7 +36,7 @@ export default class StepsDAO {
 
     try {
       const stepsList = await cursor.toArray();
-      const totalNumSteps =  await Steps.countDocuments(query);
+      const totalNumSteps =  await Steps.countDocuments(match);
 
       return { stepsList, totalNumSteps };
     } catch (e) {
