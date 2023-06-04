@@ -17,10 +17,9 @@ export default class BodyMeasureDAO {
 
   static async getMeasurementsByID({ filters = null } = {}) {
     let match;
-    let query;
     if (filters) {
       if ("id" in filters) {
-        match = { $match: { email: filters["id"] } };
+        match = { email: filters["id"] };
       }
     }
     let cursor;
@@ -29,7 +28,7 @@ export default class BodyMeasureDAO {
         throw new Error("BodyMeasurements collection is undefined");
       }
     
-      cursor = await Measurements.find(query);
+      cursor = await Measurements.find(match);
     } catch (e) {
       console.error(`Unable to issue find command, ${e}`);
       return { MeasurementList: [] };
@@ -37,7 +36,7 @@ export default class BodyMeasureDAO {
 
     try {
       const MeasurementList = await cursor.toArray();
-      await Measurements.countDocuments(query);
+      await Measurements.countDocuments(match);
 
       return { MeasurementList };
     } catch (e) {
