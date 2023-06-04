@@ -260,7 +260,10 @@ class _RegisterViewState extends State<RegisterView> {
                           borderRadius: BorderRadius.circular(50.0),
                         ),
                       ),
-                      child: const Text('REGISTER'),
+                      child: const Text(
+                        'Create Account',
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
                   ),
                   const SizedBox(
