@@ -10,7 +10,6 @@ String userModelToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
   String? id;
-  String username;
   String password;
   String name;
   String gender;
@@ -19,7 +18,6 @@ class UserModel {
 
   UserModel({
     this.id,
-    required this.username,
     required this.password,
     required this.name,
     required this.gender,
@@ -33,7 +31,6 @@ class UserModel {
 
     return UserModel(
       id: user["_id"],
-      username: user["username"],
       password: user["password"],
       name: user["name"],
       gender: user["gender"],
@@ -42,7 +39,6 @@ class UserModel {
     );
   }
   Map<String, dynamic> toJson() => {
-        "username": username,
         "password": password,
         "name": name,
         "gender": gender,

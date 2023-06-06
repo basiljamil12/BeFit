@@ -36,7 +36,6 @@ class _RegisterViewState extends State<RegisterView> {
   void initState() {
     _email = TextEditingController();
     _password = TextEditingController();
-    _username = TextEditingController();
     _name = TextEditingController();
     _gender = TextEditingController();
     _dob = TextEditingController();
@@ -47,7 +46,6 @@ class _RegisterViewState extends State<RegisterView> {
   void dispose() {
     _email.dispose();
     _password.dispose();
-    _username.dispose();
     _name.dispose();
     _gender.dispose();
     _dob.dispose();
@@ -57,7 +55,6 @@ class _RegisterViewState extends State<RegisterView> {
   UserModel createUserModel() {
     String email = _email.text;
     String password = _password.text;
-    String username = _username.text;
     String name = _name.text;
     String gender = _gender.text;
     DateTime dob = DateTime.parse(_dob.text);
@@ -65,7 +62,6 @@ class _RegisterViewState extends State<RegisterView> {
     return UserModel(
       email: email,
       password: password,
-      username: username,
       name: name,
       gender: gender,
       dob: dob,
@@ -106,22 +102,6 @@ class _RegisterViewState extends State<RegisterView> {
                         ),
                       ),
                     ],
-                  ),
-                  const SizedBox(height: 32.0),
-                  TextField(
-                    controller: _username,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    decoration: InputDecoration(
-                      hintText: 'Username',
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 3,
-                          color: Colors.pinkAccent,
-                        ),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
                   ),
                   const SizedBox(height: 16.0),
                   TextField(

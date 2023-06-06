@@ -54,10 +54,9 @@ export default class UsersDAO {
       return { details: [] };
     }
   }
-  static async addUser(username, password, name, gender, dob, email) {
+  static async addUser(password, name, gender, dob, email) {
     try {
       const userDoc = {
-        username: username,
         password: password,
         name: name,
         gender: gender,
@@ -70,13 +69,12 @@ export default class UsersDAO {
       return { Error: e };
     }
   }
-  static async updateUser(username, password, name, gender, dob, email) {
+  static async updateUser(password, name, gender, dob, email) {
     try {
       const updateResponse = await users.updateOnne(
         { _id: new ObjectId(id) },
         {
           $set: {
-            username: username,
             password: password,
             name: name,
             gender: gender,

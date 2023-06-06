@@ -32,7 +32,6 @@ export default class UserController {
 
   static async apiPostUser(req, res, next) {
     try {
-      const username = req.body.username.toLowerCase();
       const password = req.body.password;
       const name = req.body.name.toLowerCase();
       const gender = req.body.gender.toLowerCase();
@@ -40,7 +39,6 @@ export default class UserController {
       const email = req.body.email;
 
       await UsersDAO.addUser(
-        username,
         password,
         name,
         gender,
@@ -54,7 +52,6 @@ export default class UserController {
   }
   static async apiPutUser(req, res, next) {
     try {
-      const username = req.body.username.toLowerCase();
       const password = req.body.password;
       const name = req.body.name.toLowerCase();
       const gender = req.body.gender.toLowerCase();
@@ -62,7 +59,6 @@ export default class UserController {
       const email = req.body.email;
 
       const userResponse = await UsersDAO.updateUser(
-        username,
         password,
         name,
         gender,
