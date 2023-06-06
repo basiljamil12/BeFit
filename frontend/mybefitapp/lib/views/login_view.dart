@@ -39,7 +39,7 @@ class _LoginViewState extends State<LoginView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
+            SizedBox(
               width: screenWidth,
               height: imageHeight,
               child: Image.asset(

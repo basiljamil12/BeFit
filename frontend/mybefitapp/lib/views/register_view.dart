@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mybefitapp/model/user_model.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/utilities/constant_routes.dart';
-
 import '../services/Api/user_api_call.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+  const RegisterView({Key? key}) : super(key: key);
 
   @override
   State<RegisterView> createState() => _RegisterViewState();
@@ -15,10 +14,37 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
-  late final TextEditingController _username;
+  late final TextEditingController _confirmPassword;
   late final TextEditingController _name;
   late final TextEditingController _gender;
   late final TextEditingController _dob;
+  int _currentStep = 0;
+
+  @override
+  void initState() {
+    _email = TextEditingController();
+    _password = TextEditingController();
+    _confirmPassword = TextEditingController();
+    _name = TextEditingController();
+    _gender = TextEditingController();
+    _dob = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    _confirmPassword.dispose();
+    _name.dispose();
+    _gender.dispose();
+    _dob.dispose();
+    super.dispose();
+  }
+
+  bool isPasswordMatch() {
+    return _password.text == _confirmPassword.text;
+  }
 
   Future<bool> fireBaseSignin() async {
     final email = _email.text;
@@ -32,24 +58,16 @@ class _RegisterViewState extends State<RegisterView> {
     return false;
   }
 
-  @override
-  void initState() {
-    _email = TextEditingController();
-    _password = TextEditingController();
-    _name = TextEditingController();
-    _gender = TextEditingController();
-    _dob = TextEditingController();
-    super.initState();
+  void _nextStep() {
+    setState(() {
+      _currentStep += 1;
+    });
   }
 
-  @override
-  void dispose() {
-    _email.dispose();
-    _password.dispose();
-    _name.dispose();
-    _gender.dispose();
-    _dob.dispose();
-    super.dispose();
+  void _previousStep() {
+    setState(() {
+      _currentStep -= 1;
+    });
   }
 
   UserModel createUserModel() {
@@ -70,188 +88,320 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    const aspectRatio = 16 / 12; // Replace with your image's aspect ratio
+    final imageHeight = screenWidth / aspectRatio;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            // Wrap with SingleChildScrollView
-            child: Padding(
+      body: SingleChildScrollView(
+        // Wrap with SingleChildScrollView
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: screenWidth,
+              height: imageHeight,
+              child: Image.asset(
+                'assets/image.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: const [
-                      SizedBox(height: 32.0),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Create Account',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 35.0,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Become a part of BeFit and stay healthy',
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16.0),
-                  TextField(
-                    controller: _email,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      hintText: 'Email',
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 3,
-                          color: Colors.pinkAccent,
-                        ),
-                        borderRadius: BorderRadius.circular(50),
+                children: const [
+                  SizedBox(height: 32.0),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Create Account',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 35.0,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16.0),
-                  TextField(
-                    controller: _password,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 3,
-                          color: Colors.pinkAccent,
-                        ),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
+                  SizedBox(height: 8),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Become a part of BeFit and stay healthy',
                     ),
                   ),
-                  const SizedBox(height: 16.0),
-                  TextField(
-                    controller: _name,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    decoration: InputDecoration(
-                      hintText: 'Name',
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 3,
-                          color: Colors.pinkAccent,
-                        ),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  TextField(
-                    controller: _gender,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    decoration: InputDecoration(
-                      hintText: 'Gender',
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 3,
-                          color: Colors.pinkAccent,
-                        ),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  TextField(
-                    controller: _dob,
-                    decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.calendar_today),
-                        hintText: 'Date of Birth',
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            width: 3,
-                            color: Colors.pinkAccent,
-                          ),
-                          borderRadius: BorderRadius.circular(50),
-                        )),
-                    readOnly: true,
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1950),
-                          lastDate: DateTime(2100));
-
-                      if (pickedDate != null) {
-                        String formattedDate = pickedDate.toUtc().toString();
-                        setState(() {
-                          _dob.text = formattedDate;
-                        });
-                      } else {}
-                    },
-                  ),
-                  const SizedBox(height: 24.0),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(colors: [
-                        Colors.redAccent,
-                        Colors.pinkAccent,
-                      ]),
-                      borderRadius: BorderRadius.circular(50.0),
-                      boxShadow: const <BoxShadow>[
-                        BoxShadow(
-                            color: Color.fromRGBO(
-                                0, 0, 0, 0.30), //shadow for button
-                            blurRadius: 5)
-                      ],
-                    ), //blur radius of shadow),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          final isTrue = await fireBaseSignin();
-                          if (isTrue) {
-                            UserModel user = createUserModel();
-                            var response = await BaseUserClient()
-                                .postUserApi(user)
-                                .catchError((e) {});
-                            if (response == null) return;
-                            await AuthService.firebase().logOut();
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                loginScreen, (route) => false);
-                          }
-                        } catch (e) {
-                          print(e);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        disabledForegroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        minimumSize: const Size(150, 60),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                      ),
-                      child: const Text(
-                        'Create Account',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                      height: 80.0), // Add extra spacing at the bottom
                 ],
               ),
             ),
-          ),
+            const SizedBox(height: 16.0),
+            _currentStep == 0
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: _email,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            hintText: 'Email',
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 3,
+                                color: Colors.pinkAccent,
+                              ),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16.0),
+                        TextField(
+                          controller: _password,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            hintText: 'Password',
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 3,
+                                color: Colors.pinkAccent,
+                              ),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16.0),
+                        TextField(
+                          controller: _confirmPassword,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            hintText: 'Confirm Password',
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 3,
+                                color: Colors.pinkAccent,
+                              ),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24.0),
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(colors: [
+                              Colors.redAccent,
+                              Colors.pinkAccent,
+                            ]),
+                            borderRadius: BorderRadius.circular(50.0),
+                            boxShadow: const <BoxShadow>[
+                              BoxShadow(
+                                color: Color.fromRGBO(0, 0, 0, 0.30),
+                                blurRadius: 5,
+                              )
+                            ],
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              if (isPasswordMatch()) {
+                                _nextStep();
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('Error'),
+                                    content: const Text(
+                                      'Passwords do not match!',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              disabledForegroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                              minimumSize: const Size(150, 60),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                            ),
+                            child: const Text(
+                              'Next',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: _name,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          decoration: InputDecoration(
+                            hintText: 'Name',
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 3,
+                                color: Colors.pinkAccent,
+                              ),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16.0),
+                        TextField(
+                          controller: _gender,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          decoration: InputDecoration(
+                            hintText: 'Gender',
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 3,
+                                color: Colors.pinkAccent,
+                              ),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16.0),
+                        TextField(
+                          controller: _dob,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.calendar_today),
+                            hintText: 'Date of Birth',
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 3,
+                                color: Colors.pinkAccent,
+                              ),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                          readOnly: true,
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1950),
+                              lastDate: DateTime(2100),
+                            );
+
+                            if (pickedDate != null) {
+                              String formattedDate =
+                                  pickedDate.toUtc().toString();
+                              setState(() {
+                                _dob.text = formattedDate;
+                              });
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 24.0),
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(colors: [
+                              Colors.redAccent,
+                              Colors.pinkAccent,
+                            ]),
+                            borderRadius: BorderRadius.circular(50.0),
+                            boxShadow: const <BoxShadow>[
+                              BoxShadow(
+                                color: Color.fromRGBO(0, 0, 0, 0.30),
+                                blurRadius: 5,
+                              )
+                            ],
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              try {
+                                final isTrue = await fireBaseSignin();
+                                if (isTrue) {
+                                  UserModel user = createUserModel();
+                                  var response = await BaseUserClient()
+                                      .postUserApi(user)
+                                      .catchError((e) {});
+                                  if (response == null) return;
+                                  await AuthService.firebase().logOut();
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                      loginScreen, (route) => false);
+                                }
+                              } catch (e) {
+                                print(e);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              disabledForegroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                              minimumSize: const Size(150, 60),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                            ),
+                            child: const Text(
+                              'Create Account',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24.0),
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(colors: [
+                              Colors.redAccent,
+                              Colors.pinkAccent,
+                            ]),
+                            borderRadius: BorderRadius.circular(50.0),
+                            boxShadow: const <BoxShadow>[
+                              BoxShadow(
+                                color: Color.fromRGBO(0, 0, 0, 0.30),
+                                blurRadius: 5,
+                              )
+                            ],
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              try {
+                                _previousStep();
+                              } catch (e) {
+                                print(e);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              disabledForegroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                              minimumSize: const Size(150, 60),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                            ),
+                            child: const Text(
+                              'Back',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+            const SizedBox(height: 20.0), // Add extra spacing at the bottom
+          ],
         ),
       ),
     );

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mybefitapp/services/Api/step_api_call.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
-import 'package:pedometer/pedometer.dart';
+//import 'package:pedometer/pedometer.dart';
 import '../../services/Api/user_api_call.dart';
 
 class MainHome extends StatefulWidget {
@@ -89,7 +89,8 @@ class _MainHomeState extends State<MainHome> {
                       ),
                       padding: const EdgeInsets.all(10.0),
                       child: ListTile(
-                        leading: Icon(Icons.local_fire_department_rounded),
+                        leading:
+                            const Icon(Icons.local_fire_department_rounded),
                         title: const Text('Steps'),
                         subtitle: FutureBuilder(
                           future: _stepData,
