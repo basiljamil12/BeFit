@@ -1,6 +1,6 @@
 import { Double, Int32 } from "mongodb";
 import BodyMeasureDAO from "../dao/bodymeasurements_DAO.js";
-export default class UserController {
+export default class MeasurementsController {
 
     static async apiGetMeasurementsByID(req, res, next) {
           
@@ -47,7 +47,7 @@ export default class UserController {
         const email= req.query.email;
   
         const userResponse = await BodyMeasureDAO.updateMeasurements(
-          req.query.id,
+          req.query.email,
           new Int32(height),
           new Int32(weight),
           new Double(bmi),

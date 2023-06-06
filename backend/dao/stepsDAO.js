@@ -19,7 +19,12 @@ export default class StepsDAO {
     let match;
     if (filters) {
       if ("id" in filters) {
-        match = { email: filters["id"] };
+        match = { email: filters["id"] } ;
+        
+      }
+      if ("date" in filters) {
+        match = { date: filters["date"] } ;
+        
       }
     }
     let cursor;
@@ -37,6 +42,7 @@ export default class StepsDAO {
     try {
       const stepsList = await cursor.toArray();
       const totalNumSteps =  await Steps.countDocuments(match);
+      
 
       return { stepsList, totalNumSteps };
     } catch (e) {
@@ -47,7 +53,7 @@ export default class StepsDAO {
     }
   }
 
-  static async addSteps(steps, date, email) {
+  static async addSleep(steps, date, email) {
     try {
       const stepsDoc = {
         steps: new Int32(steps),
@@ -61,10 +67,10 @@ export default class StepsDAO {
     }
   }
 
-  static async updateSteps(id, steps, date, email) {
+  static async updateSleep(id, steps, date, email) {
     try {
       const updateResponse = await Steps.updateOne(
-        { _id: new ObjectId(id) },
+        { email: email },
         {
           $set: {
             steps: new Int32(steps),

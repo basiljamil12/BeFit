@@ -62,10 +62,10 @@ export default class BodyMeasureDAO {
     }
   }
 
-  static async updateMeasurements(id, height, weight,bmi, email) {
+  static async updateMeasurements(height, weight,bmi, email) {
     try {
       const updateResponse = await Measurements.updateOne(
-        { _id: new ObjectId(id) },
+        { email: email },
         {
           $set: {
             height: new Int32(height),

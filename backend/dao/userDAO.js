@@ -72,7 +72,7 @@ export default class UsersDAO {
   static async updateUser(password, name, gender, dob, email) {
     try {
       const updateResponse = await users.updateOnne(
-        { _id: new ObjectId(id) },
+        { email: email },
         {
           $set: {
             password: password,

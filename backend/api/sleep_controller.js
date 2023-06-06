@@ -1,36 +1,36 @@
-import { Int32 } from "mongodb";
-import StepsDAO from "../dao/stepsDAO.js";
-export default class StepsController {
+import SleepDAO from "../dao/sleepDAO.js";
+export default class SleepController {
 
-    static async apiGetStepsByID(req, res, next) {
+    static async apiGetSleepByID(req, res, next) {
           
       let filters = {}
       if (req.query.id) {
-        filters.steps=req.body.steps
+        filters.email=req.body.email
         filters.id = req.query.id;
       }
   
-      const { stepsList, totalNumSteps } = await StepsDAO.getstepsByID ({
+      const { sleepList}  = await SleepDAO.getsleepByID ({
           filters,
       })
   
       let response = {
-          steps: stepsList,
+          sleep: sleepList,
           filters: filters,
-          total_results: totalNumSteps,
       }
       res.json(response)
   }
   
-    static async apiPostSteps(req, res, next) {
+    static async apiPostSleep(req, res, next) {
       try {
-        const steps= new Int32(req.body.steps);
-        const date= req.body.date;
+        const starttime= req.body.starttime;
+        const endtime= req.body.endtime;
+        const duration= req.body.duration;
         const email= req.query.email;
   
-        await StepsDAO.addSleep(
-          new Int32(steps),
-            date,
+        await SleepDAO.addSleep(
+            starttime,
+            endtime,
+            duration,
             email
         );
         res.json({ Status: "Success" });
@@ -38,17 +38,19 @@ export default class StepsController {
         res.status(500).json({ Error: e.message });
       }
     }
-    static async apiPutSteps(req, res, next) {
+    static async apiPutSleep(req, res, next) {
       try {
-        const steps= new Int32(req.body.steps);
-        const date= req.body.date;
+        const starttime= req.body.starttime;
+        const endtime= req.body.endtime;
+        const duration= req.body.duration;
         const email= req.query.email;
   
-        const userResponse = await StepsDAO.updateSleep(
+        const userResponse = await SleepDAO.updateSleep(
           req.query.email,
-          new Int32(steps),
-            date,
-            email
+          starttime,
+          endtime,
+          duration,
+          email
         );
         var { error } = userResponse;
         if (error) {
