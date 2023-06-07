@@ -53,7 +53,7 @@ export default class StepsDAO {
     }
   }
 
-  static async addSleep(steps, date, email) {
+  static async addStep(steps, date, email) {
     try {
       const stepsDoc = {
         steps: new Int32(steps),
@@ -67,7 +67,7 @@ export default class StepsDAO {
     }
   }
 
-  static async updateSleep(id, steps, date, email) {
+  static async updateStep(id, steps, date, email) {
     try {
       const updateResponse = await Steps.updateOne(
         { email: email },

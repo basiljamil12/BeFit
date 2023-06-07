@@ -25,7 +25,7 @@ export default class SleepController {
         const starttime= req.body.starttime;
         const endtime= req.body.endtime;
         const duration= req.body.duration;
-        const email= req.query.email;
+        const email= req.body.email;
   
         await SleepDAO.addSleep(
             starttime,

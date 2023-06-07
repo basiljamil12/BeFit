@@ -26,7 +26,7 @@ export default class MeasurementsController {
         const height= new Int32(req.body.height);
         const weight= new Int32(req.body.weight);
         const bmi= new Double(req.body.bmi);
-        const email= req.query.email;
+        const email= req.body.email;
   
         await BodyMeasureDAO.addMeasurements(
             new Int32(height),
