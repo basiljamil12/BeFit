@@ -5,9 +5,10 @@ export default class StepsController {
     static async apiGetStepsByID(req, res, next) {
           
       let filters = {}
-      if (req.query.id) {
+      if ( req.query.id ) {
         filters.steps=req.body.steps
         filters.id = req.query.id;
+        filters.date = req.query.date;
       }
   
       const { stepsList, totalNumSteps } = await StepsDAO.getstepsByID ({

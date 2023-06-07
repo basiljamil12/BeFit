@@ -16,16 +16,16 @@ export default class StepsDAO {
   }
   
   static async getstepsByID({ filters = null } = {}) {
-    let match;
+    let match= {};
     if (filters) {
       if ("id" in filters) {
-        match = { email: filters["id"] } ;
-        
+        match.email = filters["id"];
+        if ("date" in filters) {
+          match.date = filters["date"];
+        }
       }
-      if ("date" in filters) {
-        match = { date: filters["date"] } ;
-        
-      }
+      
+     
     }
     let cursor;
     try {
