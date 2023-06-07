@@ -11,8 +11,8 @@ String baseURL = constants['url'];
 class BaseStepClient {
   var client = http.Client();
 
-  Future<dynamic> getStepApi(String api) async {
-    var uri = Uri.parse('$baseURL/steps?id=$api');
+  Future<dynamic> getStepApi(String forID, String forDate) async {
+    var uri = Uri.parse('$baseURL/steps?date=$forDate&id=$forID');
     var response = await client.get(uri);
     if (response.statusCode == 200) {
       return response.body;

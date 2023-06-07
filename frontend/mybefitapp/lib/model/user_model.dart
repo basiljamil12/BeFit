@@ -38,6 +38,7 @@ class UserModel {
       email: user["email"],
     );
   }
+
   Map<String, dynamic> toJson() => {
         "password": password,
         "name": name,

@@ -43,6 +43,7 @@ dependencies:
   intl: ^0.17.0
   google_nav_bar: ^5.0.6
   pedometer: ^3.0.0
+  sensors_plus: ^1.0.0
 
 dev_dependencies:
   flutter_test:
