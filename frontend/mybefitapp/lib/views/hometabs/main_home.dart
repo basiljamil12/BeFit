@@ -1,10 +1,13 @@
-import 'dart:convert';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:mybefitapp/model/step_model.dart';
+import 'package:mybefitapp/model/user_model.dart';
 import 'package:mybefitapp/services/Api/step_api_call.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
+import 'package:mybefitapp/services/libraries/steps_sensor.dart';
+import 'package:mybefitapp/services/libraries/steps_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
-//import 'package:pedometer/pedometer.dart';
 import '../../services/Api/user_api_call.dart';
 
 class MainHome extends StatefulWidget {
@@ -17,14 +20,33 @@ class MainHome extends StatefulWidget {
 class _MainHomeState extends State<MainHome> {
   late Future<dynamic> _userData;
   late Future<dynamic> _stepData;
+  final StepTracker stepTracker = StepTracker();
+  late Timer _timer;
 
   @override
   void initState() {
     super.initState();
-    // Retrieve the current user when the widget initializes
     String email = AuthService.firebase().currentUser?.email.toString() ?? '';
+
+    DateTime now = DateTime.now().toUtc();
+    DateTime utcDate = DateTime.utc(now.year, now.month, now.day);
+    String utcString = DateFormat("yyyy-MM-ddTHH:mm:ss'Z'").format(utcDate);
+
     _userData = BaseUserClient().getUserApi(email);
-    _stepData = BaseStepClient().getStepApi(email);
+    _stepData = BaseStepClient().getStepApi(email, utcString);
+    //_stepData = StepsClient().stepCheck(utcDate, email, '123');
+
+    stepTracker.startTracking();
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    stepTracker.stopTracking();
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -46,9 +68,8 @@ class _MainHomeState extends State<MainHome> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         final model = snapshot.data!;
-                        Map<String, dynamic> jsonData = json.decode(model);
-                        List<dynamic> users = jsonData['users'];
-                        String name = users[0]['name'];
+                        UserModel jsonDataa = userModelFromJson(model);
+                        String name = jsonDataa.name;
                         return Text(
                           'Welcome, $name',
                           style: const TextStyle(
@@ -97,13 +118,9 @@ class _MainHomeState extends State<MainHome> {
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               final model = snapshot.data!;
-                              Map<String, dynamic> jsonData =
-                                  json.decode(model);
-                              List<dynamic> forSteps = jsonData['steps'];
-                              String stepsCount =
-                                  forSteps[0]['steps'].toString();
+                              StepModel forSteps = stepModelFromJson(model);
                               return Text(
-                                stepsCount,
+                                forSteps.steps,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20.0),
@@ -126,11 +143,14 @@ class _MainHomeState extends State<MainHome> {
                             BorderRadius.circular(20.0), // set border radius
                       ),
                       padding: const EdgeInsets.all(10.0),
-                      child: const ListTile(
-                        leading: Icon(Icons.local_fire_department_rounded),
-                        title: Text('Steps'),
-                        subtitle: Text('a'),
-                        trailing: Icon(Icons.arrow_right),
+                      child: ListTile(
+                        leading:
+                            const Icon(Icons.local_fire_department_rounded),
+                        title: const Text('Steps'),
+                        subtitle: Text(
+                          '${stepTracker.stepCount}',
+                        ),
+                        trailing: const Icon(Icons.arrow_right),
                       ),
                     ),
                   ],

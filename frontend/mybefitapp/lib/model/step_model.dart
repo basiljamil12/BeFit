@@ -22,7 +22,7 @@ class StepModel {
 
     return StepModel(
         id: forSteps["_id"],
-        steps: forSteps["steps"],
+        steps: forSteps["steps"].toString(),
         date: DateTime.parse(forSteps["date"]),
         email: forSteps["email"]);
   }
