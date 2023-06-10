@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:mybefitapp/model/step_model.dart';
 import 'package:mybefitapp/services/Api/step_api_call.dart';
 
@@ -6,44 +7,64 @@ class StepsClient {
     return StepModel(steps: steps, date: date, email: email);
   }
 
-  // Future<dynamic> stepCheck(DateTime date, String email, String steps) async {
-  //   Future<dynamic> stepData =
-  //       await BaseStepClient().getStepApi(email, date.toUtc().toString());
-  //   return stepData.then((response) async {
-  //     StepModel stepsData = stepModelFromJson(response);
-
-  //     if (stepsData != null) {
-  //       // Use the `stepsData` object as needed
-  //       // ...
-  //       return stepsData;
-  //     } else {
-  //       StepModel postSteps = createSteps(date, email, steps);
-  //       await BaseStepClient().postStepApi(postSteps).catchError((e) {});
-  //       stepData =
-  //           await BaseStepClient().getStepApi(email, date.toUtc().toString());
-  //       return stepData;
-  //     }
-  //   }).catchError((error) {
-  //     print('Error: $error');
-  //   });
-  // }
-
   Future<dynamic> getDataFromApiOrPostNew(
     String email,
     String steps,
     DateTime date,
   ) async {
-    var stepData =
-        await BaseStepClient().getStepApi(email, date.toUtc().toString());
-
-    if (stepData == null) {
-      // If the API response is null, post new data
-      StepModel newData = createSteps(date, email, steps);
-      var response = await BaseStepClient().postStepApi(newData);
-      return response;
-    } else {
-      // If the API response is not null, return the existing data
-      return stepData;
+    String utcString = date.toString();
+    var stepData = await BaseStepClient().getStepApi(email, utcString);
+    if (stepData != null) {
+      // Check if total_results is greater than 1
+      var jsonData = jsonDecode(stepData);
+      var totalResults = jsonData['total_results'];
+      if (totalResults >= 1) {
+        // Return the existing data
+        return stepData;
+      }
     }
+
+    // If total_results is not greater than 1 or the API response is null, post new data
+    StepModel newData = createSteps(date, email, steps);
+    var response = await BaseStepClient().postStepApi(newData);
+    if (response != null) {
+      var stepData = await BaseStepClient().getStepApi(email, utcString);
+      if (stepData != null) {
+        // Check if total_results is greater than 1
+        var jsonData = jsonDecode(stepData);
+        var totalResults = jsonData['total_results'];
+        if (totalResults >= 1) {
+          // Return the existing data
+          return stepData;
+        }
+      }
+    }
+    return response;
+  }
+
+  void updateSteps(
+    String email,
+    DateTime date,
+    int trackedSteps,
+  ) async {
+    String utcString = date.toString();
+    int steps = 0;
+    String id = '';
+
+    var stepData = await BaseStepClient().getStepApi(email, utcString);
+
+    if (stepData != null) {
+      var jsonData = jsonDecode(stepData);
+      var stepsList = jsonData['steps'];
+
+      if (stepsList != null) {
+        steps = stepsList[0]['steps'];
+        id = stepsList[0]['_id'];
+      }
+    }
+
+    steps += trackedSteps;
+    StepModel newData = createSteps(date, email, steps.toString());
+    await BaseStepClient().putStepApi(newData, id);
   }
 }

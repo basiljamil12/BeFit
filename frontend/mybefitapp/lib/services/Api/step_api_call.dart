@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'package:mybefitapp/utilities/constants.dart';
-
 import 'package:http/http.dart' as http;
-
 import '../../model/step_model.dart';
 
 Map<String, dynamic> constants = Constants.getConstant();

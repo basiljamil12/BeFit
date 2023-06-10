@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mybefitapp/model/step_model.dart';
 import 'package:mybefitapp/model/user_model.dart';
-import 'package:mybefitapp/services/Api/step_api_call.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/services/libraries/steps_sensor.dart';
 import 'package:mybefitapp/services/libraries/steps_service.dart';
@@ -22,6 +20,7 @@ class _MainHomeState extends State<MainHome> {
   late Future<dynamic> _stepData;
   final StepTracker stepTracker = StepTracker();
   late Timer _timer;
+  late Timer _updateSteps;
 
   @override
   void initState() {
@@ -30,15 +29,18 @@ class _MainHomeState extends State<MainHome> {
 
     DateTime now = DateTime.now().toUtc();
     DateTime utcDate = DateTime.utc(now.year, now.month, now.day);
-    String utcString = DateFormat("yyyy-MM-ddTHH:mm:ss'Z'").format(utcDate);
+    //String utcString = DateFormat("yyyy-MM-ddTHH:mm:ss'Z'").format(utcDate);
 
     _userData = BaseUserClient().getUserApi(email);
-    _stepData = BaseStepClient().getStepApi(email, utcString);
-    //_stepData = StepsClient().stepCheck(utcDate, email, '123');
+    _stepData = StepsClient().getDataFromApiOrPostNew(email, '0', utcDate);
 
     stepTracker.startTracking();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       setState(() {});
+    });
+    _updateSteps = Timer.periodic(const Duration(seconds: 5), (_) {
+      StepsClient().updateSteps(email, utcDate, stepTracker.stepCount);
+      stepTracker.stepCount = 0;
     });
   }
 
@@ -46,6 +48,7 @@ class _MainHomeState extends State<MainHome> {
   void dispose() {
     stepTracker.stopTracking();
     _timer.cancel();
+    _updateSteps.cancel();
     super.dispose();
   }
 
@@ -73,7 +76,9 @@ class _MainHomeState extends State<MainHome> {
                         return Text(
                           'Welcome, $name',
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20.0),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25.0,
+                          ),
                         );
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
