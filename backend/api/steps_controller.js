@@ -43,10 +43,10 @@ export default class StepsController {
       try {
         const steps= new Int32(req.body.steps);
         const date= req.body.date;
-        const email= req.query.email;
+        const email= req.body.email;
   
         const userResponse = await StepsDAO.updateStep(
-          req.query.email,
+          req.query.id,
           new Int32(steps),
             date,
             email

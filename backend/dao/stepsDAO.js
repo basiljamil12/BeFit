@@ -70,7 +70,7 @@ export default class StepsDAO {
   static async updateStep(id, steps, date, email) {
     try {
       const updateResponse = await Steps.updateOne(
-        { email: email },
+        { _id: new ObjectId(id) },
         {
           $set: {
             steps: new Int32(steps),
