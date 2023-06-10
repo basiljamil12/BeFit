@@ -44,7 +44,6 @@ dependencies:
   google_nav_bar: ^5.0.6
   pedometer: ^3.0.0
   sensors_plus: ^1.0.0
-  aesthetic_dialogs: ^0.0.15
   mrx_charts: ^0.1.3
 
 

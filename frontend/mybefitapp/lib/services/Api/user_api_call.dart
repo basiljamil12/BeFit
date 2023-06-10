@@ -14,6 +14,7 @@ class BaseUserClient {
 
   Future<dynamic> getUserApi(String api) async {
     var uri = Uri.parse('$baseURL/userprofile?id=$api');
+
     var response = await client.get(uri);
     if (response.statusCode == 200) {
       return response.body;

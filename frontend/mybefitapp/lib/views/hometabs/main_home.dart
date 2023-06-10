@@ -32,7 +32,6 @@ class _MainHomeState extends State<MainHome> {
   @override
   void initState() {
     super.initState();
-
     refreshData();
 
     DateTime now = DateTime.now().toUtc();
