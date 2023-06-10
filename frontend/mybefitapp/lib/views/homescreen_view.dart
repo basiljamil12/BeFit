@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
         child: GNav(
+          rippleColor: const Color.fromARGB(255, 236, 164, 188),
           //currentIndex: _selectedIndex,
           onTabChange: _onItemTapped,
           activeColor: Colors.pinkAccent,
