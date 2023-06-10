@@ -10,6 +10,7 @@ import 'package:mybefitapp/services/libraries/steps_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
 import 'package:mybefitapp/utilities/constant_routes.dart';
 import 'package:mybefitapp/services/Api/body_api_call.dart';
+import 'package:mybefitapp/views/widgets/step_chart.dart';
 
 class MainHome extends StatefulWidget {
   const MainHome({Key? key}) : super(key: key);
@@ -266,6 +267,7 @@ class _MainHomeState extends State<MainHome> {
                                     borderRadius: BorderRadius.circular(20),
                                     color: Colors.grey,
                                   ),
+                                  child: const LinePage(),
                                 ),
                               ),
                               Padding(
@@ -276,6 +278,7 @@ class _MainHomeState extends State<MainHome> {
                                     borderRadius: BorderRadius.circular(20),
                                     color: Colors.grey,
                                   ),
+                                  child: const LinePage(),
                                 ),
                               ),
                             ],
