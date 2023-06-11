@@ -23,7 +23,7 @@ router
 
 router
     .route("/steps")
-    .get(StepsControl.apiGetStepsByID)
+    .get(StepsControl.apiGetSteps)
     .post(StepsControl.apiPostSteps)
     .put(StepsControl.apiPutSteps)
 

@@ -2,25 +2,40 @@ import { Int32 } from "mongodb";
 import StepsDAO from "../dao/stepsDAO.js";
 export default class StepsController {
 
-    static async apiGetStepsByID(req, res, next) {
-          
+
+
+  static async apiGetSteps(req, res, next) {
+    try {
+      const { id, date } = req.query;
       let filters = {}
-      if ( req.query.id ) {
-        filters.steps=req.body.steps
+      if (req.query.id) {
+        filters.email=req.body.email
+        if(id){
         filters.id = req.query.id;
-        filters.date = req.query.date;
-      }
+        }
+        if(date){
+          filters.date = req.query.date;
+        }
+      
+    }
   
-      const { stepsList, totalNumSteps } = await StepsDAO.getstepsByID ({
-          filters,
-      })
+      const { stepsList, totalNumSteps } = await StepsDAO.getsteps({ filters, });
   
-      let response = {
-          steps: stepsList,
-          filters: filters,
-          total_results: totalNumSteps,
-      }
-      res.json(response)
+      const response = {
+        steps: stepsList,
+        total_steps: totalNumSteps,
+        filters: filters,
+      };
+  
+      res.json(response);
+  
+      // Clean up filters object
+      delete filters.id;
+      delete filters.date;
+    } catch (error) {
+      console.error(`Error in getStepsController: ${error}`);
+      res.status(500).json({ error: 'Internal server error' });
+    }
   }
   
     static async apiPostSteps(req, res, next) {

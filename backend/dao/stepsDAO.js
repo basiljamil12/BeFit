@@ -15,7 +15,7 @@ export default class StepsDAO {
     }
   }
   
-  static async getstepsByID({ filters = null } = {}) {
+  static async getsteps({ filters = null } = {}) {
     let match= {};
     if (filters) {
       if ("id" in filters) {
@@ -52,7 +52,7 @@ export default class StepsDAO {
       return { stepsList: [], totalNumSteps: 0 };
     }
   }
-
+  
   static async addStep(steps, date, email) {
     try {
       const stepsDoc = {
