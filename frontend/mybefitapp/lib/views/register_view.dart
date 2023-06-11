@@ -16,7 +16,7 @@ class _RegisterViewState extends State<RegisterView> {
   late final TextEditingController _password;
   late final TextEditingController _confirmPassword;
   late final TextEditingController _name;
-  late final TextEditingController _gender;
+  String _selectedGender = 'Male'; // Selected gender option
   late final TextEditingController _dob;
   int _currentStep = 0;
 
@@ -26,7 +26,6 @@ class _RegisterViewState extends State<RegisterView> {
     _password = TextEditingController();
     _confirmPassword = TextEditingController();
     _name = TextEditingController();
-    _gender = TextEditingController();
     _dob = TextEditingController();
     super.initState();
   }
@@ -37,7 +36,6 @@ class _RegisterViewState extends State<RegisterView> {
     _password.dispose();
     _confirmPassword.dispose();
     _name.dispose();
-    _gender.dispose();
     _dob.dispose();
     super.dispose();
   }
@@ -74,7 +72,7 @@ class _RegisterViewState extends State<RegisterView> {
     String email = _email.text;
     String password = _password.text;
     String name = _name.text;
-    String gender = _gender.text;
+    String gender = _selectedGender;
     DateTime dob = DateTime.parse(_dob.text);
 
     return UserModel(
@@ -260,7 +258,8 @@ class _RegisterViewState extends State<RegisterView> {
                                 colors: [Colors.red, Colors.pinkAccent],
                               ).createShader(bounds),
                               child: const Text(
-                                  'Already have an account? Sign in!'),
+                                'Already have an account? Sign in!',
+                              ),
                             ),
                           ),
                         ),
@@ -287,10 +286,13 @@ class _RegisterViewState extends State<RegisterView> {
                           ),
                         ),
                         const SizedBox(height: 16.0),
-                        TextField(
-                          controller: _gender,
-                          enableSuggestions: false,
-                          autocorrect: false,
+                        DropdownButtonFormField<String>(
+                          value: _selectedGender,
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedGender = newValue!;
+                            });
+                          },
                           decoration: InputDecoration(
                             hintText: 'Gender',
                             border: OutlineInputBorder(
@@ -301,6 +303,13 @@ class _RegisterViewState extends State<RegisterView> {
                               borderRadius: BorderRadius.circular(50),
                             ),
                           ),
+                          items: <String>['Male', 'Female']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
                         ),
                         const SizedBox(height: 16.0),
                         TextField(
@@ -326,8 +335,7 @@ class _RegisterViewState extends State<RegisterView> {
                             );
 
                             if (pickedDate != null) {
-                              String formattedDate =
-                                  pickedDate.toUtc().toString();
+                              String formattedDate = pickedDate.toString();
                               setState(() {
                                 _dob.text = formattedDate;
                               });
@@ -402,14 +410,15 @@ class _RegisterViewState extends State<RegisterView> {
                               shaderCallback: (bounds) => const LinearGradient(
                                 colors: [Colors.red, Colors.pinkAccent],
                               ).createShader(bounds),
-                              child: const Text('Previous'),
+                              child: const Text(
+                                'Previous',
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-            const SizedBox(height: 20.0), // Add extra spacing at the bottom
           ],
         ),
       ),

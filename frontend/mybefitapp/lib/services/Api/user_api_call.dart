@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:mybefitapp/model/user_model.dart';
 import 'package:mybefitapp/utilities/constants.dart';
 
@@ -14,7 +13,6 @@ class BaseUserClient {
 
   Future<dynamic> getUserApi(String api) async {
     var uri = Uri.parse('$baseURL/userprofile?id=$api');
-
     var response = await client.get(uri);
     if (response.statusCode == 200) {
       return response.body;

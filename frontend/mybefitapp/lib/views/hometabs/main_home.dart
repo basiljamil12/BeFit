@@ -8,7 +8,6 @@ import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/services/libraries/steps_sensor.dart';
 import 'package:mybefitapp/services/libraries/steps_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
-import 'package:mybefitapp/utilities/constant_routes.dart';
 import 'package:mybefitapp/services/Api/body_api_call.dart';
 import 'package:mybefitapp/views/widgets/step_chart.dart';
 
@@ -81,6 +80,21 @@ class _MainHomeState extends State<MainHome> {
                 width: double.infinity,
                 height: 130.0,
                 decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.redAccent,
+                      Colors.pinkAccent,
+                    ],
+                  ),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0, 2),
+                      blurRadius: 6,
+                    ),
+                  ],
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.vertical(
                     bottom: Radius.elliptical(
@@ -88,7 +102,6 @@ class _MainHomeState extends State<MainHome> {
                       100.0,
                     ),
                   ),
-                  color: Colors.pinkAccent,
                 ),
               ),
               Column(
@@ -150,22 +163,24 @@ class _MainHomeState extends State<MainHome> {
                           ),
                           padding: const EdgeInsets.all(10.0),
                           child: ListTile(
-                            leading:
-                                const Icon(Icons.local_fire_department_rounded),
-                            title: const Text('Steps'),
+                            leading: const Icon(
+                              Icons.local_fire_department_rounded,
+                              color: Colors.pinkAccent,
+                            ),
+                            title: const Text(
+                              'Steps',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                              ),
+                            ),
                             subtitle: FutureBuilder(
                               future: _stepData,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   final model = snapshot.data!;
                                   StepModel forSteps = stepModelFromJson(model);
-                                  return Text(
-                                    forSteps.steps,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0,
-                                    ),
-                                  );
+                                  return Text(forSteps.steps);
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {
@@ -173,7 +188,10 @@ class _MainHomeState extends State<MainHome> {
                                 }
                               },
                             ),
-                            trailing: const Icon(Icons.arrow_right),
+                            trailing: const Icon(
+                              Icons.arrow_right,
+                              color: Colors.pinkAccent,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 15),
@@ -184,9 +202,17 @@ class _MainHomeState extends State<MainHome> {
                           ),
                           padding: const EdgeInsets.all(10.0),
                           child: ListTile(
-                            leading:
-                                const Icon(Icons.local_fire_department_rounded),
-                            title: const Text('Weight'),
+                            leading: const Icon(
+                              Icons.fitness_center,
+                              color: Colors.pinkAccent,
+                            ),
+                            title: const Text(
+                              'Weight',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                              ),
+                            ),
                             subtitle: FutureBuilder(
                               future: _bodyData,
                               builder: (context, snapshot) {
@@ -194,12 +220,7 @@ class _MainHomeState extends State<MainHome> {
                                   final model = snapshot.data!;
                                   BodyModel forBody = bodyModelFromJson(model);
                                   return Text(
-                                    '${forBody.weight.toString()} kg',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0,
-                                    ),
-                                  );
+                                      '${forBody.weight.toString()} kg');
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {
@@ -207,7 +228,10 @@ class _MainHomeState extends State<MainHome> {
                                 }
                               },
                             ),
-                            trailing: const Icon(Icons.arrow_right),
+                            trailing: const Icon(
+                              Icons.arrow_right,
+                              color: Colors.pinkAccent,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 15),
@@ -218,9 +242,17 @@ class _MainHomeState extends State<MainHome> {
                           ),
                           padding: const EdgeInsets.all(10.0),
                           child: ListTile(
-                            leading:
-                                const Icon(Icons.local_fire_department_rounded),
-                            title: const Text('Height'),
+                            leading: const Icon(
+                              Icons.directions_run_rounded,
+                              color: Colors.pinkAccent,
+                            ),
+                            title: const Text(
+                              'Height',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                              ),
+                            ),
                             subtitle: FutureBuilder(
                               future: _bodyData,
                               builder: (context, snapshot) {
@@ -228,12 +260,7 @@ class _MainHomeState extends State<MainHome> {
                                   final model = snapshot.data!;
                                   BodyModel forBody = bodyModelFromJson(model);
                                   return Text(
-                                    '${forBody.height.toString()} cm',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0,
-                                    ),
-                                  );
+                                      '${forBody.height.toString()} cm');
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {
@@ -241,7 +268,10 @@ class _MainHomeState extends State<MainHome> {
                                 }
                               },
                             ),
-                            trailing: const Icon(Icons.arrow_right),
+                            trailing: const Icon(
+                              Icons.arrow_right,
+                              color: Colors.pinkAccent,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 15),
@@ -264,9 +294,9 @@ class _MainHomeState extends State<MainHome> {
                                   width: 265.0,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: Colors.grey,
+                                    color: Colors.white,
                                   ),
-                                  child: const LinePage(),
+                                  child: const BarPage(),
                                 ),
                               ),
                               Padding(
@@ -275,9 +305,9 @@ class _MainHomeState extends State<MainHome> {
                                   width: 265.0,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: Colors.grey,
+                                    color: Colors.white,
                                   ),
-                                  child: const LinePage(),
+                                  child: const BarPage(),
                                 ),
                               ),
                             ],
@@ -286,16 +316,6 @@ class _MainHomeState extends State<MainHome> {
                       ],
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await AuthService.firebase().logOut();
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                        loginScreen,
-                        (route) => false,
-                      );
-                    },
-                    child: const Text('logout'),
-                  )
                 ],
               ),
             ],
