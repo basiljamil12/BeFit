@@ -17,7 +17,7 @@ class StepsClient {
     if (stepData != null) {
       // Check if total_results is greater than 1
       var jsonData = jsonDecode(stepData);
-      var totalResults = jsonData['total_results'];
+      var totalResults = jsonData['total_steps'];
       if (totalResults >= 1) {
         // Return the existing data
         return stepData;
@@ -32,7 +32,7 @@ class StepsClient {
       if (stepData != null) {
         // Check if total_results is greater than 1
         var jsonData = jsonDecode(stepData);
-        var totalResults = jsonData['total_results'];
+        var totalResults = jsonData['total_steps'];
         if (totalResults >= 1) {
           // Return the existing data
           return stepData;

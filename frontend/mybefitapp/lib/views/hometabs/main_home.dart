@@ -184,7 +184,12 @@ class _MainHomeState extends State<MainHome> {
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {
-                                  return const CircularProgressIndicator();
+                                  return const Center(
+                                    child: SizedBox(
+                                      width: 50,
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
                                 }
                               },
                             ),
@@ -224,7 +229,12 @@ class _MainHomeState extends State<MainHome> {
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {
-                                  return const CircularProgressIndicator();
+                                  return const Center(
+                                    child: SizedBox(
+                                      width: 50,
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
                                 }
                               },
                             ),
@@ -264,7 +274,12 @@ class _MainHomeState extends State<MainHome> {
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {
-                                  return const CircularProgressIndicator();
+                                  return const Center(
+                                    child: SizedBox(
+                                      width: 50,
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
                                 }
                               },
                             ),
