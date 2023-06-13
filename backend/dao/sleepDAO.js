@@ -32,17 +32,18 @@ export default class SleepDAO {
       cursor = await Sleep.find(match);
     } catch (e) {
       console.error(`Unable to issue find command, ${e}`);
-      return { sleepList: []};
+      return { sleepList: [], total_results: 0 };
     }
 
     try {
       const sleepList = await cursor.toArray();
-      return {sleepList};
+      const total_results =  await Sleep.countDocuments(match);
+      return {sleepList, total_results};
     } catch (e) {
       console.error(
         `Unable to convert cursor to array or problem counting documents, ${e}`
       );
-      return { sleepList: []};
+      return { sleepList: [], total_results: 0};
     }
   }
 

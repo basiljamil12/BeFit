@@ -10,13 +10,16 @@ export default class MeasurementsController {
         filters.id = req.query.id;
       }
   
-      const { MeasurementList } = await BodyMeasureDAO.getMeasurementsByID ({
+      const { MeasurementList,total_results } = await BodyMeasureDAO.getMeasurementsByID ({
           filters,
+         
       })
   
       let response = {
           Measurements: MeasurementList,
           filters: filters,
+          total_results: total_results,
+          
       }
       res.json(response)
   }

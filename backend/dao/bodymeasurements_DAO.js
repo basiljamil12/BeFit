@@ -31,19 +31,19 @@ export default class BodyMeasureDAO {
       cursor = await Measurements.find(match);
     } catch (e) {
       console.error(`Unable to issue find command, ${e}`);
-      return { MeasurementList: [] };
+      return { MeasurementList: [] , total_results: 0};
     }
 
     try {
       const MeasurementList = await cursor.toArray();
-      await Measurements.countDocuments(match);
+      const total_results = await Measurements.countDocuments(match);
 
-      return { MeasurementList };
+      return { MeasurementList,total_results };
     } catch (e) {
       console.error(
         `Unable to convert cursor to array or problem counting documents, ${e}`
       );
-      return { MeasurementList: []};
+      return { MeasurementList: [], total_results: 0};
     }
   }
 

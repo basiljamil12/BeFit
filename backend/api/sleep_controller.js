@@ -9,13 +9,15 @@ export default class SleepController {
         filters.id = req.query.id;
       }
   
-      const { sleepList}  = await SleepDAO.getsleepByID ({
+      const { sleepList,total_results}  = await SleepDAO.getsleepByID ({
           filters,
+         
       })
   
       let response = {
           sleep: sleepList,
           filters: filters,
+          total_results: total_results,
       }
       res.json(response)
   }

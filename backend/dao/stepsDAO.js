@@ -24,8 +24,6 @@ export default class StepsDAO {
           match.date = filters["date"];
         }
       }
-      
-     
     }
     let cursor;
     try {
