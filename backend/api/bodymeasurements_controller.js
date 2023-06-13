@@ -6,7 +6,6 @@ export default class MeasurementsController {
           
       let filters = {}
       if (req.query.id) {
-        filters.bmi=req.body.bmi
         filters.id = req.query.id;
       }
   
@@ -25,13 +24,11 @@ export default class MeasurementsController {
       try {
         const height= new Int32(req.body.height);
         const weight= new Int32(req.body.weight);
-        const bmi= new Double(req.body.bmi);
         const email= req.body.email;
   
         await BodyMeasureDAO.addMeasurements(
             new Int32(height),
             new Int32(weight),
-            new Double(bmi),
             email
         );
         res.json({ Status: "Success" });
@@ -43,14 +40,12 @@ export default class MeasurementsController {
       try {
         const height= new Int32(req.body.height);
         const weight= new Int32(req.body.weight);
-        const bmi= new Double(req.body.bmi);
         const email= req.body.email;
   
         const userResponse = await BodyMeasureDAO.updateMeasurements(
           req.query.id,
           new Int32(height),
           new Int32(weight),
-          new Double(bmi),
           email
         );
         var { error } = userResponse;
