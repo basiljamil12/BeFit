@@ -43,7 +43,7 @@ class UserModel {
         "password": password,
         "name": name,
         "gender": gender,
-        "dob": dob.toUtc().toString(),
+        "dob": dob.toString(),
         "email": email,
       };
 }

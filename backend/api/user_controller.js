@@ -59,7 +59,7 @@ export default class UserController {
       const email = req.body.email;
 
       const userResponse = await UsersDAO.updateUser(
-        req.query.email,
+        req.query.id,
         password,
         name,
         gender,

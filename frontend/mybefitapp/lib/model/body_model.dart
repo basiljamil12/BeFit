@@ -7,13 +7,11 @@ class BodyModel {
   String? id;
   int height;
   int weight;
-  double? bmi;
   String email;
   BodyModel({
     this.id,
     required this.height,
     required this.weight,
-    this.bmi,
     required this.email,
   });
 
@@ -25,14 +23,12 @@ class BodyModel {
         id: forBody["_id"],
         height: forBody["height"],
         weight: forBody["weight"],
-        bmi: forBody["bmi"],
         email: forBody["email"]);
   }
 
   Map<String, dynamic> toJson() => {
         "height": height.toString(),
         "weight": weight.toString(),
-        "bmi": bmi.toString(),
         "email": email,
       };
 }

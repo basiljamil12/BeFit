@@ -69,10 +69,10 @@ export default class UsersDAO {
       return { Error: e };
     }
   }
-  static async updateUser(password, name, gender, dob, email) {
+  static async updateUser(id, password, name, gender, dob, email) {
     try {
-      const updateResponse = await users.updateOnne(
-        { email: email },
+      const updateResponse = await users.updateOne(
+        { _id: new ObjectId(id) },
         {
           $set: {
             password: password,
