@@ -5,6 +5,7 @@ import 'package:mybefitapp/model/step_model.dart';
 import 'package:mybefitapp/model/user_model.dart';
 import 'package:mybefitapp/services/Api/user_api_call.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
+import 'package:mybefitapp/services/libraries/body_service.dart';
 import 'package:mybefitapp/services/libraries/steps_sensor.dart';
 import 'package:mybefitapp/services/libraries/steps_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
@@ -62,7 +63,7 @@ class _MainHomeState extends State<MainHome> {
 
     _userData = BaseUserClient().getUserApi(email);
     _stepData = StepsClient().getDataFromApiOrPostNew(email, '0', utcDate);
-    _bodyData = BaseBodyClient().getBodyApi(email);
+    _bodyData = BodyClient().checkAndGetBody(email);
 
     await Future.delayed(const Duration(seconds: 1));
   }
@@ -186,7 +187,7 @@ class _MainHomeState extends State<MainHome> {
                                 } else {
                                   return const Center(
                                     child: SizedBox(
-                                      width: 50,
+                                      width: 30,
                                       child: CircularProgressIndicator(),
                                     ),
                                   );
@@ -229,12 +230,7 @@ class _MainHomeState extends State<MainHome> {
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {
-                                  return const Center(
-                                    child: SizedBox(
-                                      width: 50,
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  );
+                                  return const Text('Set Body Data First');
                                 }
                               },
                             ),
@@ -274,12 +270,7 @@ class _MainHomeState extends State<MainHome> {
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {
-                                  return const Center(
-                                    child: SizedBox(
-                                      width: 50,
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  );
+                                  return const Text('Set Body Data First');
                                 }
                               },
                             ),
