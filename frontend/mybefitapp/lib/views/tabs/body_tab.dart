@@ -59,8 +59,9 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: MediaQuery.of(context).size.height * 0.8,
+      color: Styles.bgColor,
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -245,7 +246,6 @@ class _BodyState extends State<Body> {
                                       ),
                                       child: Column(
                                         children: [
-                                          Text('Height:'),
                                           const SizedBox(height: 10),
                                           TextField(
                                             controller: _height,
@@ -256,7 +256,6 @@ class _BodyState extends State<Body> {
                                             ),
                                           ),
                                           const SizedBox(height: 10),
-                                          Text('Weight:'),
                                           TextField(
                                             controller: _weight,
                                             enableSuggestions: false,

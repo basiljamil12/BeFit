@@ -1,5 +1,9 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:mybefitapp/model/sleep_model.dart';
+import 'package:mybefitapp/services/Api/sleep_api_call.dart';
+import 'package:mybefitapp/services/auth/auth_service.dart';
+import 'package:mybefitapp/utilities/app_styles.dart';
 
 class AddSleep extends StatefulWidget {
   const AddSleep({super.key});
@@ -9,10 +13,11 @@ class AddSleep extends StatefulWidget {
 }
 
 class _AddSleepState extends State<AddSleep> {
-late final TextEditingController _starttime;
-late final TextEditingController _endtime;
+  late final TextEditingController _starttime;
+  late final TextEditingController _endtime;
+  String email = AuthService.firebase().currentUser?.email.toString() ?? '';
 
-@override
+  @override
   void initState() {
     _starttime = TextEditingController();
     _endtime = TextEditingController();
@@ -26,10 +31,18 @@ late final TextEditingController _endtime;
     super.dispose();
   }
 
+  SleepModel createSleepModel() {
+    DateTime starttime = DateTime.parse(_starttime.text);
+    DateTime endtime = DateTime.parse(_endtime.text);
+
+    return SleepModel(starttime: starttime, endtime: endtime, email: email);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: MediaQuery.of(context).size.height * 0.7,
+      color: Styles.bgColor,
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -54,11 +67,11 @@ late final TextEditingController _endtime;
                   ),
                 ),
                 const Padding(
-                  padding: EdgeInsets.fromLTRB(20.0, 15.0, 0.0, 15.0),
+                  padding: EdgeInsets.fromLTRB(18.0, 15.0, 0.0, 15.0),
                   child: Text(
                     'Add Sleep Schedule',
                     style: TextStyle(
-                      fontSize: 15.0,
+                      fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -86,31 +99,79 @@ late final TextEditingController _endtime;
                   Padding(
                     padding: const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0.0),
                     child: TextField(
-                          controller: _starttime,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.calendar_today),
-                            hintText: 'Date of Birth',
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                width: 3,
-                                color: Colors.pinkAccent,
-                              ),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
+                      controller: _starttime,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.bedtime_rounded),
+                        hintText: 'Start Time',
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 3,
+                            color: Colors.pinkAccent,
                           ),
-                          readOnly: true,
-                          onTap: () async {
-                            Future<TimeOfDay?> selectedTime = showTimePicker(
-  initialTime: TimeOfDay.now(),
-  context: context,
-);
-                          },
-                        ),//GET SLEEP START TIME HERE
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                      ),
+                      readOnly: true,
+                      onTap: () async {
+                        TimeOfDay? selectedTime = await showTimePicker(
+                          initialTime: TimeOfDay.now(),
+                          context: context,
+                        );
+                        DateTime combinedDateTime = DateTime.now();
+                        if (selectedTime != null) {
+                          DateTime currentDateTime = DateTime.now().toUtc();
+                          combinedDateTime = DateTime(
+                            currentDateTime.year,
+                            currentDateTime.month,
+                            currentDateTime.day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          ).toUtc();
+                        }
+                        setState(() {
+                          _starttime.text = combinedDateTime.toString();
+                        });
+                      },
+                    ), //GET SLEEP START TIME HERE
                   ),
                   const SizedBox(height: 16.0),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 10.0),
-                    child: Text('b')//GET SLEEP END TIME HERE
+                    child: TextField(
+                      controller: _endtime,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.sunny),
+                        hintText: 'End Time',
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 3,
+                            color: Colors.pinkAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                      ),
+                      readOnly: true,
+                      onTap: () async {
+                        TimeOfDay? selectedTime = await showTimePicker(
+                          initialTime: TimeOfDay.now(),
+                          context: context,
+                        );
+                        DateTime combinedDateTime = DateTime.now();
+                        if (selectedTime != null) {
+                          DateTime currentDateTime = DateTime.now().toUtc();
+                          combinedDateTime = DateTime(
+                            currentDateTime.year,
+                            currentDateTime.month,
+                            currentDateTime.day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          ).toUtc();
+                        }
+                        setState(() {
+                          _endtime.text = combinedDateTime.toString();
+                        });
+                      },
+                    ), //GET SLEEP END TIME HERE
                   ),
                   const SizedBox(height: 16.0),
                   DecoratedBox(
@@ -129,7 +190,12 @@ late final TextEditingController _endtime;
                     ),
                     child: ElevatedButton(
                       onPressed: () async {
-                        
+                        SleepModel sleep = createSleepModel();
+                        var response = await BaseSleepClient()
+                            .postSleepApi(sleep)
+                            .catchError((e) {});
+                        print(response);
+                        if (response == null) return;
                         //DIALOG BOX THAT DISPLAYS 'SAVED'
                         CoolAlert.show(
                           context: context,

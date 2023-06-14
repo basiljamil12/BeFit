@@ -31,7 +31,7 @@ class _BarPageState extends State<BarPage> {
         ],
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: const Text('Bar'),
+        title: const Text('Steps'),
       ),
       backgroundColor: const Color(0xFF1B0E41),
       body: Center(

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mybefitapp/model/sleep_model.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/services/libraries/sleep_service.dart';
+import 'package:mybefitapp/utilities/app_styles.dart';
 import 'package:mybefitapp/views/tabs/sheets/add_sleep_sheet.dart';
 
 class Sleep extends StatefulWidget {
@@ -23,10 +25,40 @@ class _SleepState extends State<Sleep> {
     _sleepData = SleepClient().checkAndGetSleep(email);
   }
 
+  Duration getDurationBetween(DateTime dateTime1, DateTime dateTime2) {
+    DateTime startDateTime = dateTime1;
+    DateTime endDateTime = dateTime2;
+
+    // Swap the start and end DateTime if necessary
+    if (startDateTime.isAfter(endDateTime)) {
+      DateTime temp = startDateTime;
+      startDateTime = endDateTime;
+      endDateTime = temp;
+    }
+
+    Duration duration = endDateTime.difference(startDateTime);
+    return duration;
+  }
+
+  String getQuality(int hours) {
+    if (hours <= 3) {
+      return "Bad";
+    } else if (hours > 3 && hours <= 6) {
+      return "Average";
+    } else if (hours > 6 && hours <= 9) {
+      return "Good";
+    } else if (hours > 9) {
+      return "Over Sleep";
+    } else {
+      return "Can't measure quality.";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: MediaQuery.of(context).size.height * 0.8,
+      color: Styles.bgColor,
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -67,7 +99,16 @@ class _SleepState extends State<Sleep> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final model = snapshot.data!;
-      
+                  SleepModel sleepy = sleepModelFromJson(model);
+                  DateTime start = sleepy.starttime;
+                  TimeOfDay startingtime =
+                      TimeOfDay.fromDateTime(start.toLocal());
+                  DateTime end = sleepy.endtime;
+                  TimeOfDay endingtime = TimeOfDay.fromDateTime(end.toLocal());
+                  Duration duration = getDurationBetween(start, end);
+                  int hours = duration.inHours;
+                  int minutes = duration.inMinutes % 60;
+                  String forQuality = getQuality(hours);
                   //REMINDER TO SELF: WORK FOR DISPLAYING BODY MEASUREMENTS HERE
                   return Column(
                     children: [
@@ -78,7 +119,115 @@ class _SleepState extends State<Sleep> {
                           color: Colors.white,
                         ),
                         width: 320,
-                        child: Column(children: [Text('a')]),
+                        child: Column(children: [
+                          Text(
+                            'Sleep Schedule',
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(
+                                10.0, 30.0, 10.0, 5.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      'Start Time:',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${startingtime}',
+                                      style: const TextStyle(
+                                        fontSize: 15.0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Divider(
+                                  color: Colors.grey,
+                                  indent: 0,
+                                  endIndent: 0,
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      'End Time:',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${endingtime}',
+                                      style: const TextStyle(
+                                        fontSize: 15.0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Divider(
+                                  color: Colors.grey,
+                                  indent: 0,
+                                  endIndent: 0,
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      'Duration:',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Text(
+                                      '$hours hours $minutes minutes',
+                                      style: const TextStyle(
+                                        fontSize: 15.0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Divider(
+                                  color: Colors.grey,
+                                  indent: 0,
+                                  endIndent: 0,
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      'Quality:',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Text(
+                                      '$forQuality',
+                                      style: const TextStyle(
+                                        fontSize: 15.0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                        ]),
                       ),
                       const SizedBox(
                         height: 20,

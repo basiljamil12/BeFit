@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mybefitapp/model/body_model.dart';
 import 'package:mybefitapp/services/Api/body_api_call.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
+import 'package:mybefitapp/utilities/app_styles.dart';
 
 class AddBody extends StatefulWidget {
   const AddBody({super.key});
@@ -40,8 +41,9 @@ class _AddBodyState extends State<AddBody> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: MediaQuery.of(context).size.height * 0.7,
+      color: Styles.bgColor,
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -70,7 +72,7 @@ class _AddBodyState extends State<AddBody> {
                   child: Text(
                     'Add Body Measurements',
                     style: TextStyle(
-                      fontSize: 15.0,
+                      fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

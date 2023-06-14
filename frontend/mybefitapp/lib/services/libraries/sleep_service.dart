@@ -1,8 +1,5 @@
 import 'dart:convert';
-
-import 'package:mybefitapp/model/body_model.dart';
 import 'package:mybefitapp/model/sleep_model.dart';
-import 'package:mybefitapp/services/Api/body_api_call.dart';
 import 'package:mybefitapp/services/Api/sleep_api_call.dart';
 
 class SleepClient {
