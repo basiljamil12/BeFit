@@ -4,7 +4,7 @@ import 'package:mybefitapp/services/Api/body_api_call.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/services/libraries/body_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
-import 'package:mybefitapp/views/tabs/bodysheets/add_body_sheet.dart';
+import 'package:mybefitapp/views/tabs/sheets/add_body_sheet.dart';
 
 class Body extends StatefulWidget {
   const Body({super.key});
@@ -106,8 +106,6 @@ class _BodyState extends State<Body> {
                   int weight = forBody.weight;
                   String id = forBody.id!;
                   String bmi = BodyClient().forBmi(height, weight).toString();
-                  _height.text = height.toString();
-                  _weight.text = weight.toString();
                   //REMINDER TO SELF: WORK FOR DISPLAYING BODY MEASUREMENTS HERE
                   return Column(
                     children: [
@@ -295,7 +293,6 @@ class _BodyState extends State<Body> {
                                                     await BaseBodyClient()
                                                         .putBodyApi(body, id)
                                                         .catchError((e) {});
-                                                print(response);
                                                 if (response == null) return;
                                               },
                                               style: ElevatedButton.styleFrom(

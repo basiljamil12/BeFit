@@ -71,7 +71,7 @@ export default class StepsController {
           res.status(400).json({ error });
         }
         if (userResponse.modifiedCount === 0) {
-          throw new Error("Unable to update the user");
+          throw new Error("Unable to update the steps");
         }
         res.json({ Status: "Success" });
       } catch (e) {

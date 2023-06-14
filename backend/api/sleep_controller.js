@@ -26,13 +26,11 @@ export default class SleepController {
       try {
         const starttime= req.body.starttime;
         const endtime= req.body.endtime;
-        const duration= req.body.duration;
         const email= req.body.email;
   
         await SleepDAO.addSleep(
             starttime,
             endtime,
-            duration,
             email
         );
         res.json({ Status: "Success" });
@@ -44,14 +42,12 @@ export default class SleepController {
       try {
         const starttime= req.body.starttime;
         const endtime= req.body.endtime;
-        const duration= req.body.duration;
         const email= req.query.email;
   
         const userResponse = await SleepDAO.updateSleep(
           req.query.email,
           starttime,
           endtime,
-          duration,
           email
         );
         var { error } = userResponse;
@@ -59,7 +55,7 @@ export default class SleepController {
           res.status(400).json({ error });
         }
         if (userResponse.modifiedCount === 0) {
-          throw new Error("Unable to update the user");
+          throw new Error("Unable to update the sleep");
         }
         res.json({ Status: "Success" });
       } catch (e) {

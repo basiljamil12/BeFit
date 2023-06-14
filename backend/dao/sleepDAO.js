@@ -47,12 +47,11 @@ export default class SleepDAO {
     }
   }
 
-  static async addSleep(starttime, endtime,duration, email) {
+  static async addSleep(starttime, endtime, email) {
     try {
       const sleepDoc = {
         starttime: starttime,
         endtime: endtime,
-        duration: duration,
         email: email,
       };
       return await Sleep.insertOne(sleepDoc);
@@ -62,7 +61,7 @@ export default class SleepDAO {
     }
   }
 
-  static async updateSleep(id, starttime, endtime,duration, email) {
+  static async updateSleep(id, starttime, endtime, email) {
     try {
       const updateResponse = await Sleep.updateOne(
         { email:email },
@@ -70,7 +69,6 @@ export default class SleepDAO {
           $set: {
             starttime:starttime,
             endtime: endtime,
-            duration:duration,
             email: email,
           },
         }

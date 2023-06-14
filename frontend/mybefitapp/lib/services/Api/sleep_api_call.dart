@@ -1,15 +1,15 @@
-import 'package:mybefitapp/model/body_model.dart';
+import 'package:mybefitapp/model/sleep_model.dart';
 import 'package:mybefitapp/utilities/constants.dart';
 import 'package:http/http.dart' as http;
 
 Map<String, dynamic> constants = Constants.getConstant();
 String baseURL = constants['url'];
 
-class BaseBodyClient {
+class BaseSleepClient {
   var client = http.Client();
 
-  Future<dynamic> getBodyApi(String forID) async {
-    var uri = Uri.parse('$baseURL/measurements?id=$forID');
+  Future<dynamic> getSleepApi(String forID) async {
+    var uri = Uri.parse('$baseURL/sleep?id=$forID');
     var response = await client.get(uri);
     if (response.statusCode == 200) {
       return response.body;
@@ -18,9 +18,9 @@ class BaseBodyClient {
     }
   }
 
-  Future<dynamic> postBodyApi(dynamic object) async {
-    var uri = Uri.parse('$baseURL/measurements');
-    var payload = bodyModeltoJson(object);
+  Future<dynamic> postSleepApi(dynamic object) async {
+    var uri = Uri.parse('$baseURL/sleep');
+    var payload = sleepModelToJson(object);
     var headers = {
       'Content-Type': 'application/json',
     };
@@ -32,9 +32,9 @@ class BaseBodyClient {
     }
   }
 
-  Future<dynamic> putBodyApi(dynamic object, String api) async {
-    var uri = Uri.parse('$baseURL/measurements?id=$api');
-    var payload = bodyModeltoJson(object);
+  Future<dynamic> putSleepApi(dynamic object, String api) async {
+    var uri = Uri.parse('$baseURL/sleep?id=$api');
+    var payload = sleepModelToJson(object);
     var headers = {
       'Content-Type': 'application/json',
     };
