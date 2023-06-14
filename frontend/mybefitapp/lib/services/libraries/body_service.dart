@@ -24,4 +24,13 @@ class BodyClient {
       return '';
     }
   }
+
+  double forBmi(int height, int weight) {
+    double meterHeight = height / 100;
+    double squaredHeight = meterHeight * meterHeight;
+    double bmiBad = weight / squaredHeight;
+    double bmi = double.parse((bmiBad).toStringAsFixed(2));
+
+    return bmi;
+  }
 }

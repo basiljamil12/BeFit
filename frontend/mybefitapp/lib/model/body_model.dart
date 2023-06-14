@@ -27,8 +27,8 @@ class BodyModel {
   }
 
   Map<String, dynamic> toJson() => {
-        "height": height.toString(),
-        "weight": weight.toString(),
+        "height": height,
+        "weight": weight,
         "email": email,
       };
 }

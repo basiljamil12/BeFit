@@ -56,7 +56,7 @@ export default class MeasurementsController {
           res.status(400).json({ error });
         }
         if (userResponse.modifiedCount === 0) {
-          throw new Error("Unable to update the user");
+          throw new Error("Unable to update the measurements");
         }
         res.json({ Status: "Success" });
       } catch (e) {

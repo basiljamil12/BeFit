@@ -1,6 +1,6 @@
+import 'package:mybefitapp/model/body_model.dart';
 import 'package:mybefitapp/utilities/constants.dart';
 import 'package:http/http.dart' as http;
-import '../../model/step_model.dart';
 
 Map<String, dynamic> constants = Constants.getConstant();
 String baseURL = constants['url'];
@@ -20,7 +20,7 @@ class BaseBodyClient {
 
   Future<dynamic> postBodyApi(dynamic object) async {
     var uri = Uri.parse('$baseURL/measurements');
-    var payload = stepModelToJson(object);
+    var payload = bodyModeltoJson(object);
     var headers = {
       'Content-Type': 'application/json',
     };
@@ -34,11 +34,14 @@ class BaseBodyClient {
 
   Future<dynamic> putBodyApi(dynamic object, String api) async {
     var uri = Uri.parse('$baseURL/measurements?id=$api');
-    var payload = stepModelToJson(object);
+    print(uri);
+    var payload = bodyModeltoJson(object);
+    print(payload);
     var headers = {
       'Content-Type': 'application/json',
     };
     var response = await client.put(uri, body: payload, headers: headers);
+    print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return response.body;
     } else {
