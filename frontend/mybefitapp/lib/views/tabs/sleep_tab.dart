@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/services/libraries/sleep_service.dart';
+import 'package:mybefitapp/views/tabs/sheets/add_sleep_sheet.dart';
 
 class Sleep extends StatefulWidget {
   const Sleep({super.key});
@@ -24,9 +25,9 @@ class _SleepState extends State<Sleep> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.8,
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.8,
+      child: SingleChildScrollView(
         child: Column(
           children: [
             Row(
@@ -66,7 +67,7 @@ class _SleepState extends State<Sleep> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final model = snapshot.data!;
-
+      
                   //REMINDER TO SELF: WORK FOR DISPLAYING BODY MEASUREMENTS HERE
                   return Column(
                     children: [
@@ -113,7 +114,7 @@ class _SleepState extends State<Sleep> {
                         const Padding(
                           padding: EdgeInsets.all(12.0),
                           child: Text(
-                              'You can add your sleep schedule in this section and then be recommended schedules accordingly.'),
+                              'Your devices can help you get better sleep and understand your sleep patterns.'),
                         ),
                         const SizedBox(height: 15),
                         DecoratedBox(
@@ -145,7 +146,7 @@ class _SleepState extends State<Sleep> {
                                 enableDrag: true,
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return Container();
+                                  return const AddSleep();
                                 },
                               );
                             },
