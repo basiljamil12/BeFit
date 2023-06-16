@@ -18,6 +18,16 @@ class BaseStepClient {
     }
   }
 
+  Future<dynamic> getAllStepApi(String forID) async {
+    var uri = Uri.parse('$baseURL/steps?id=$forID');
+    var response = await client.get(uri);
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      //TODO throw exception
+    }
+  }
+
   Future<dynamic> postStepApi(dynamic object) async {
     var uri = Uri.parse('$baseURL/steps');
     var payload = stepModelToJson(object);

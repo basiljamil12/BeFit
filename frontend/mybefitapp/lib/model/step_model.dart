@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 StepModel stepModelFromJson(String str) => StepModel.fromJson(json.decode(str));
-
+StepModel stepModelAllFromJson(String str) =>
+    StepModel.fromJson(json.decode(str));
 String stepModelToJson(StepModel data) => json.encode(data.toJson());
 
 class StepModel {
@@ -25,6 +26,14 @@ class StepModel {
         steps: forSteps["steps"].toString(),
         date: DateTime.parse(forSteps["date"]),
         email: forSteps["email"]);
+  }
+
+  factory StepModel.fromAllJson(Map<String, dynamic> json) {
+    return StepModel(
+        id: json["_id"],
+        steps: json["steps"].toString(),
+        date: DateTime.parse(json["date"]),
+        email: json["email"]);
   }
 
   Map<String, dynamic> toJson() => {

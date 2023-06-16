@@ -25,8 +25,6 @@ class _BodyState extends State<Body> {
     _height = TextEditingController();
     _weight = TextEditingController();
     super.initState();
-    String email = AuthService.firebase().currentUser?.email.toString() ?? '';
-    //REMINDER TO SELF: INSTEAD OF TYPED EMAIL, USE VARIABLE WHEN WORKING ON DISPLAYING BODY MEASUREMENTS
     _bodyData = BodyClient().checkAndGetBody(email);
   }
 

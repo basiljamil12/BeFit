@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'package:mybefitapp/model/step_model.dart';
 import 'package:mybefitapp/services/Api/step_api_call.dart';
 
@@ -42,6 +43,21 @@ class StepsClient {
     return response;
   }
 
+  Future<dynamic> getAllStepData(String email) async {
+    var stepData = await BaseStepClient().getAllStepApi(email);
+    if (stepData != null) {
+      // Check if total_results is greater than 1
+      var jsonData = jsonDecode(stepData);
+      var totalResults = jsonData['total_steps'];
+      if (totalResults >= 1) {
+        // Return the existing data
+        return stepData;
+      }
+    } else {
+      return '';
+    }
+  }
+
   void updateSteps(
     String email,
     DateTime date,
@@ -66,5 +82,69 @@ class StepsClient {
     steps += trackedSteps;
     StepModel newData = createSteps(date, email, steps.toString());
     await BaseStepClient().putStepApi(newData, id);
+  }
+
+  List<dynamic> parseJsonToList(String jsonString) {
+    dynamic jsonData = json.decode(jsonString);
+    List<dynamic> jsonList = jsonData['steps'];
+    return jsonList;
+  }
+
+  double calculateAverageSteps(List<dynamic> filteredList) {
+    int totalSteps = 0;
+    int numberOfSteps = filteredList.length;
+
+    for (dynamic step in filteredList) {
+      int steps = step['steps'];
+      totalSteps += steps;
+    }
+
+    double averageSteps = totalSteps / numberOfSteps;
+    return averageSteps;
+  }
+
+  List<dynamic> filterStepsByMonth(
+      List<dynamic> stepList, int month, int year) {
+    List<dynamic> filteredList = [];
+
+    for (dynamic step in stepList) {
+      DateTime stepDate = DateFormat('yyyy-MM-dd').parse(step['date']);
+
+      if (stepDate.month == month && stepDate.year == year) {
+        filteredList.add(step);
+      }
+    }
+
+    return filteredList;
+  }
+
+  List<dynamic> filterStepsList(List<dynamic> stepList) {
+    List<dynamic> filteredList = [];
+    DateTime currentDate = DateTime.now();
+
+    for (dynamic step in stepList) {
+      DateTime stepDate = DateFormat('yyyy-MM-dd').parse(step['date']);
+
+      if (stepDate.isAfter(currentDate.subtract(const Duration(days: 7))) &&
+          stepDate.isBefore(currentDate)) {
+        filteredList.add(step);
+      }
+    }
+
+    return filteredList;
+  }
+
+  List<dynamic> filterStepsByYear(List<dynamic> stepList, int year) {
+    List<dynamic> filteredList = [];
+
+    for (dynamic step in stepList) {
+      DateTime stepDate = DateFormat('yyyy-MM-dd').parse(step['date']);
+
+      if (stepDate.year == year) {
+        filteredList.add(step);
+      }
+    }
+
+    return filteredList;
   }
 }
