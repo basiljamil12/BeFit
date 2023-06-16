@@ -34,11 +34,14 @@ class BaseSleepClient {
 
   Future<dynamic> putSleepApi(dynamic object, String api) async {
     var uri = Uri.parse('$baseURL/sleep?id=$api');
+    print(uri);
     var payload = sleepModelToJson(object);
+    print(payload);
     var headers = {
       'Content-Type': 'application/json',
     };
     var response = await client.put(uri, body: payload, headers: headers);
+    print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return response.body;
     } else {

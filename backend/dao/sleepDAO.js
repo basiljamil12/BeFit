@@ -64,10 +64,10 @@ export default class SleepDAO {
   static async updateSleep(id, starttime, endtime, email) {
     try {
       const updateResponse = await Sleep.updateOne(
-        { email:email },
+        { _id: new ObjectId(id) },
         {
           $set: {
-            starttime:starttime,
+            starttime: starttime,
             endtime: endtime,
             email: email,
           },

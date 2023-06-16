@@ -5,6 +5,7 @@ import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/services/libraries/sleep_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
 import 'package:mybefitapp/views/tabs/sheets/add_sleep_sheet.dart';
+import 'package:mybefitapp/views/tabs/sheets/edit_sleep_sheet.dart';
 
 class Sleep extends StatefulWidget {
   const Sleep({super.key});
@@ -15,7 +16,6 @@ class Sleep extends StatefulWidget {
 
 class _SleepState extends State<Sleep> {
   late Future<dynamic> _sleepData;
-  int _editStep = 0;
   String email = AuthService.firebase().currentUser?.email.toString() ?? '';
 
   @override
@@ -231,6 +231,54 @@ class _SleepState extends State<Sleep> {
                       ),
                       const SizedBox(
                         height: 20,
+                      ),
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(colors: [
+                            Colors.redAccent,
+                            Colors.pinkAccent,
+                          ]),
+                          borderRadius: BorderRadius.circular(20.0),
+                          boxShadow: const <BoxShadow>[
+                            BoxShadow(
+                              color: Color.fromRGBO(0, 0, 0, 0.30),
+                              blurRadius: 5,
+                            )
+                          ],
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            showModalBottomSheet<void>(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25.0),
+                                  topRight: Radius.circular(25.0),
+                                ),
+                              ),
+                              isScrollControlled: true,
+                              useRootNavigator: true,
+                              useSafeArea: true,
+                              enableDrag: true,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const EditSleep();
+                              },
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            disabledForegroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            minimumSize: const Size(100, 40),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                          child: const Text(
+                            'Edit Sleep',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
                       ),
                     ],
                   );

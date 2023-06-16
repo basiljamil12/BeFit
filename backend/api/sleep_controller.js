@@ -42,10 +42,10 @@ export default class SleepController {
       try {
         const starttime= req.body.starttime;
         const endtime= req.body.endtime;
-        const email= req.query.email;
+        const email= req.body.email;
   
         const userResponse = await SleepDAO.updateSleep(
-          req.query.email,
+          req.query.id,
           starttime,
           endtime,
           email
