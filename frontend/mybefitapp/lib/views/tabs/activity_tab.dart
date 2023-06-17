@@ -31,7 +31,7 @@ class _ActivityState extends State<Activity> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.9,
+      height: MediaQuery.of(context).size.height * 0.8,
       color: Styles.bgColor,
       child: SingleChildScrollView(
         child: Column(

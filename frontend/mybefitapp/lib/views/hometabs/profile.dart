@@ -5,6 +5,7 @@ import 'package:mybefitapp/services/Api/user_api_call.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
 import 'package:mybefitapp/utilities/constant_routes.dart';
+import 'package:mybefitapp/views/tabs/sheets/edit_user_sheet.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -226,224 +227,265 @@ class _ProfilePageState extends State<ProfilePage> {
                   // Add your content for the second container here
                   child: Column(
                     children: [
-                      _currentStep == 0
-                          ? Container(
+                      Container(
+                        padding:
+                            const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              onTap: () {
+                                _previousStep();
+                              },
+                              title: const Text('View Profile Information'),
+                              trailing: const Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.pinkAccent,
+                              ),
+                            ),
+                            Padding(
                               padding: const EdgeInsets.fromLTRB(
-                                  10.0, 10.0, 10.0, 5.0),
-                              child: ListTile(
-                                onTap: () {
-                                  _nextStep();
-                                },
-                                title: const Text('View Profile Information'),
-                                trailing: const Icon(
-                                  Icons.arrow_right,
-                                  color: Colors.pinkAccent,
+                                  20.0, 10.0, 20.0, 20.0),
+                              child: Container(
+                                padding: const EdgeInsets.all(10.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  color: Styles.bgColor,
+                                ),
+                                child: FutureBuilder(
+                                  future: _userData,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      final model = snapshot.data!;
+                                      UserModel jsonDataa =
+                                          userModelFromJson(model);
+                                      String name = jsonDataa.name;
+                                      String password = jsonDataa.password;
+                                      String gender = jsonDataa.gender;
+                                      String dob = jsonDataa.dob.toString();
+
+                                      DateTime currentDate = DateTime.now();
+                                      DateTime birthDate =
+                                          DateFormat("yyyy-MM-dd HH:mm:ss.SSSZ")
+                                              .parse(dob);
+
+                                      Duration ageDifference =
+                                          currentDate.difference(birthDate);
+                                      int ageInYears =
+                                          (ageDifference.inDays / 365).floor();
+                                      return Column(
+                                        children: [
+                                          const SizedBox(height: 10),
+                                          Container(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  'Name:',
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  name,
+                                                  style: const TextStyle(
+                                                    fontSize: 15.0,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const Divider(
+                                            color: Colors.grey,
+                                            thickness: 1,
+                                            indent: 0,
+                                            endIndent: 0,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Container(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  'Email:',
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  emailForScreen,
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const Divider(
+                                            color: Colors.grey,
+                                            thickness: 1,
+                                            indent: 0,
+                                            endIndent: 0,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Container(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  'Password:',
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  password,
+                                                  style: const TextStyle(
+                                                    fontSize: 15.0,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const Divider(
+                                            color: Colors.grey,
+                                            thickness: 1,
+                                            indent: 0,
+                                            endIndent: 0,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Container(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  'Gender:',
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  gender,
+                                                  style: const TextStyle(
+                                                    fontSize: 15.0,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const Divider(
+                                            color: Colors.grey,
+                                            thickness: 1,
+                                            indent: 0,
+                                            endIndent: 0,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Container(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  'Age:',
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  ageInYears.toString(),
+                                                  style: const TextStyle(
+                                                    fontSize: 15.0,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(height: 15),
+                                          DecoratedBox(
+                                            decoration: BoxDecoration(
+                                              gradient:
+                                                  const LinearGradient(colors: [
+                                                Colors.redAccent,
+                                                Colors.pinkAccent,
+                                              ]),
+                                              borderRadius:
+                                                  BorderRadius.circular(50.0),
+                                              boxShadow: const <BoxShadow>[
+                                                BoxShadow(
+                                                  color: Color.fromRGBO(
+                                                      0, 0, 0, 0.30),
+                                                  blurRadius: 5,
+                                                ),
+                                              ],
+                                            ),
+                                            child: ElevatedButton(
+                                              onPressed: () async {
+                                                showModalBottomSheet<void>(
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(25.0),
+                                                      topRight:
+                                                          Radius.circular(25.0),
+                                                    ),
+                                                  ),
+                                                  isScrollControlled: true,
+                                                  useRootNavigator: true,
+                                                  useSafeArea: true,
+                                                  enableDrag: true,
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return const EditUser();
+                                                  },
+                                                );
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                disabledForegroundColor:
+                                                    Colors.transparent,
+                                                shadowColor: Colors.transparent,
+                                                minimumSize:
+                                                    const Size(100, 40),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          50.0),
+                                                ),
+                                              ),
+                                              child: const Text(
+                                                'Edit',
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    } else if (snapshot.hasError) {
+                                      return Text('Error: ${snapshot.error}');
+                                    } else {
+                                      return const CircularProgressIndicator();
+                                    }
+                                  },
                                 ),
                               ),
                             )
-                          : Container(
-                              padding: const EdgeInsets.fromLTRB(
-                                  10.0, 10.0, 10.0, 5.0),
-                              child: Column(
-                                children: [
-                                  ListTile(
-                                    onTap: () {
-                                      _previousStep();
-                                    },
-                                    title:
-                                        const Text('View Profile Information'),
-                                    trailing: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Colors.pinkAccent,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        20.0, 10.0, 20.0, 20.0),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(10.0),
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        color: Styles.bgColor,
-                                      ),
-                                      child: FutureBuilder(
-                                        future: _userData,
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            final model = snapshot.data!;
-                                            UserModel jsonDataa =
-                                                userModelFromJson(model);
-                                            String name = jsonDataa.name;
-                                            String password =
-                                                jsonDataa.password;
-                                            String gender = jsonDataa.gender;
-                                            String dob =
-                                                jsonDataa.dob.toString();
-
-                                            DateTime currentDate =
-                                                DateTime.now();
-                                            DateTime birthDate = DateFormat(
-                                                    "yyyy-MM-dd HH:mm:ss.SSSZ")
-                                                .parse(dob);
-
-                                            Duration ageDifference = currentDate
-                                                .difference(birthDate);
-                                            int ageInYears =
-                                                (ageDifference.inDays / 365)
-                                                    .floor();
-                                            return Column(
-                                              children: [
-                                                const SizedBox(height: 10),
-                                                Container(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      const Text(
-                                                        'Name:',
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        name,
-                                                        style: const TextStyle(
-                                                          fontSize: 15.0,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const Divider(
-                                                  color: Colors.grey,
-                                                  thickness: 1,
-                                                  indent: 0,
-                                                  endIndent: 0,
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Container(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      const Text(
-                                                        'Email:',
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        emailForScreen,
-                                                        style: const TextStyle(
-                                                          fontSize: 15,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const Divider(
-                                                  color: Colors.grey,
-                                                  thickness: 1,
-                                                  indent: 0,
-                                                  endIndent: 0,
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Container(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      const Text(
-                                                        'Password:',
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        password,
-                                                        style: const TextStyle(
-                                                          fontSize: 15.0,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const Divider(
-                                                  color: Colors.grey,
-                                                  thickness: 1,
-                                                  indent: 0,
-                                                  endIndent: 0,
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Container(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      const Text(
-                                                        'Gender:',
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        gender,
-                                                        style: const TextStyle(
-                                                          fontSize: 15.0,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const Divider(
-                                                  color: Colors.grey,
-                                                  thickness: 1,
-                                                  indent: 0,
-                                                  endIndent: 0,
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Container(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      const Text(
-                                                        'Age:',
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        ageInYears.toString(),
-                                                        style: const TextStyle(
-                                                          fontSize: 15.0,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 10),
-                                              ],
-                                            );
-                                          } else if (snapshot.hasError) {
-                                            return Text(
-                                                'Error: ${snapshot.error}');
-                                          } else {
-                                            return const CircularProgressIndicator();
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                          ],
+                        ),
+                      ),
                       _editStep == 0
                           ? Container(
                               padding: const EdgeInsets.fromLTRB(

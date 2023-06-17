@@ -5,6 +5,7 @@ import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/services/libraries/body_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
 import 'package:mybefitapp/views/tabs/sheets/add_body_sheet.dart';
+import 'package:mybefitapp/views/tabs/sheets/edit_body_sheet.dart';
 
 class Body extends StatefulWidget {
   const Body({super.key});
@@ -206,118 +207,56 @@ class _BodyState extends State<Body> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(12.0),
+                      //edit button
+                      DecoratedBox(
                         decoration: BoxDecoration(
+                          gradient: const LinearGradient(colors: [
+                            Colors.redAccent,
+                            Colors.pinkAccent,
+                          ]),
                           borderRadius: BorderRadius.circular(20.0),
-                          color: Colors.white,
+                          boxShadow: const <BoxShadow>[
+                            BoxShadow(
+                              color: Color.fromRGBO(0, 0, 0, 0.30),
+                              blurRadius: 5,
+                            )
+                          ],
                         ),
-                        width: 320,
-                        child: _editStep == 0
-                            ? ListTile(
-                                onTap: _nextEdit,
-                                title: const Text('Edit Body Information'),
-                                trailing: const Icon(
-                                  Icons.arrow_right,
-                                  color: Colors.pinkAccent,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            showModalBottomSheet<void>(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25.0),
+                                  topRight: Radius.circular(25.0),
                                 ),
-                              )
-                            : Column(
-                                children: [
-                                  ListTile(
-                                    onTap: _previousEdit,
-                                    title: const Text('Edit Body Information'),
-                                    trailing: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Colors.pinkAccent,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        20.0, 10.0, 20.0, 20.0),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(10.0),
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        color: Styles.bgColor,
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          const SizedBox(height: 10),
-                                          TextField(
-                                            controller: _height,
-                                            enableSuggestions: false,
-                                            autocorrect: false,
-                                            decoration: const InputDecoration(
-                                              hintText: 'Height',
-                                            ),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          TextField(
-                                            controller: _weight,
-                                            enableSuggestions: false,
-                                            autocorrect: false,
-                                            keyboardType:
-                                                TextInputType.emailAddress,
-                                            decoration: const InputDecoration(
-                                              hintText: 'Weight',
-                                            ),
-                                          ),
-                                          const SizedBox(height: 16.0),
-                                          DecoratedBox(
-                                            decoration: BoxDecoration(
-                                              gradient:
-                                                  const LinearGradient(colors: [
-                                                Colors.redAccent,
-                                                Colors.pinkAccent,
-                                              ]),
-                                              borderRadius:
-                                                  BorderRadius.circular(50.0),
-                                              boxShadow: const <BoxShadow>[
-                                                BoxShadow(
-                                                  color: Color.fromRGBO(
-                                                      0, 0, 0, 0.30),
-                                                  blurRadius: 5,
-                                                )
-                                              ],
-                                            ),
-                                            child: ElevatedButton(
-                                              onPressed: () async {
-                                                BodyModel body =
-                                                    createBodyModel();
-                                                var response =
-                                                    await BaseBodyClient()
-                                                        .putBodyApi(body, id)
-                                                        .catchError((e) {});
-                                                if (response == null) return;
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                disabledForegroundColor:
-                                                    Colors.transparent,
-                                                shadowColor: Colors.transparent,
-                                                minimumSize: const Size(90, 30),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          50.0),
-                                                ),
-                                              ),
-                                              child: const Text(
-                                                'Save',
-                                                style: TextStyle(fontSize: 15),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
                               ),
+                              isScrollControlled: true,
+                              useRootNavigator: true,
+                              useSafeArea: true,
+                              enableDrag: true,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const EditBody();
+                              },
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            disabledForegroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            minimumSize: const Size(100, 40),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                          child: const Text(
+                            'Edit Measurements',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
                       ),
+                      
                     ],
                   );
                 } else if (snapshot.hasError) {
