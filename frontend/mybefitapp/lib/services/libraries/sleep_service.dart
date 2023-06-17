@@ -23,4 +23,33 @@ class SleepClient {
       return '';
     }
   }
+
+  String getQuality(int hours) {
+    if (hours <= 3) {
+      return "Bad";
+    } else if (hours > 3 && hours <= 6) {
+      return "Average";
+    } else if (hours > 6 && hours <= 9) {
+      return "Good";
+    } else if (hours > 9) {
+      return "Over Sleep";
+    } else {
+      return "Can't measure quality.";
+    }
+  }
+
+  Duration getDurationBetween(DateTime dateTime1, DateTime dateTime2) {
+    DateTime startDateTime = dateTime1;
+    DateTime endDateTime = dateTime2;
+
+    // Swap the start and end DateTime if necessary
+    if (startDateTime.isAfter(endDateTime)) {
+      DateTime temp = startDateTime;
+      startDateTime = endDateTime;
+      endDateTime = temp;
+    }
+
+    Duration duration = endDateTime.difference(startDateTime);
+    return duration;
+  }
 }

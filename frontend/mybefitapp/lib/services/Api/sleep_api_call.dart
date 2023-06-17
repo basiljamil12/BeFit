@@ -34,9 +34,7 @@ class BaseSleepClient {
 
   Future<dynamic> putSleepApi(dynamic object, String api) async {
     var uri = Uri.parse('$baseURL/sleep?id=$api');
-    print(uri);
     var payload = sleepModelToJson(object);
-    print(payload);
     var headers = {
       'Content-Type': 'application/json',
     };

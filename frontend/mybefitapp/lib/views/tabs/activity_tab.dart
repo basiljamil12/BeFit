@@ -1,9 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mybefitapp/model/step_model.dart';
-import 'package:mybefitapp/services/Api/step_api_call.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/services/libraries/steps_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
@@ -35,7 +31,7 @@ class _ActivityState extends State<Activity> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.8,
+      height: MediaQuery.of(context).size.height * 0.9,
       color: Styles.bgColor,
       child: SingleChildScrollView(
         child: Column(
@@ -79,47 +75,68 @@ class _ActivityState extends State<Activity> {
                     final model = snapshot.data!;
                     List<dynamic> stepList =
                         StepsClient().parseJsonToList(model);
+
                     //WEEK
                     List<dynamic> filteredList =
                         StepsClient().filterStepsList(stepList);
-                    double weeklyAverage =
+                    double weeklyAverageBefore =
                         StepsClient().calculateAverageSteps(filteredList);
+                    double weeklyAverage =
+                        double.parse((weeklyAverageBefore).toStringAsFixed(2));
+
                     //LAST WEEK
                     List<dynamic> filteredPastWeekList =
                         StepsClient().filterStepsForPreviousWeek(stepList);
-                    double pastWeeklyAverage = StepsClient()
+                    double pastWeeklyAverageBefore = StepsClient()
                         .calculateAverageSteps(filteredPastWeekList);
+                    double pastWeeklyAverage = double.parse(
+                        (pastWeeklyAverageBefore).toStringAsFixed(2));
+
                     //YEAR
                     List<dynamic> filteredYearList = StepsClient()
                         .filterStepsByYear(
                             stepList, DateTime.now().year.toInt());
-                    double yearlyAverage =
+                    double yearlyAverageBefore =
                         StepsClient().calculateAverageSteps(filteredYearList);
+                    double yearlyAverage =
+                        double.parse((yearlyAverageBefore).toStringAsFixed(2));
+
+                    //LAST YEAR
                     List<dynamic> filteredLastYearList = StepsClient()
                         .filterStepsByYear(
                             stepList, DateTime.now().year.toInt() - 1);
-                    double yearlyLastAverage = StepsClient()
+                    double yearlyLastAverageBefore = StepsClient()
                         .calculateAverageSteps(filteredLastYearList);
+                    double yearlyLastAverage = double.parse(
+                        (yearlyLastAverageBefore).toStringAsFixed(2));
+
                     //MONTH
                     List<dynamic> filteredMonthList = StepsClient()
                         .filterStepsByMonth(
                             stepList,
                             DateTime.now().month.toInt(),
                             DateTime.now().year.toInt());
+                    String monthName =
+                        getMonthName(DateTime.now().month.toInt());
+                    double monthlyAverageBefore =
+                        StepsClient().calculateAverageSteps(filteredMonthList);
+                    double monthlyAverage =
+                        double.parse((monthlyAverageBefore).toStringAsFixed(2));
+
+                    //LAST MONTH
                     List<dynamic> filteredLastMonthList = StepsClient()
                         .filterStepsByMonth(
                             stepList,
                             DateTime.now().month.toInt() - 1,
                             DateTime.now().year.toInt());
-                    String monthName =
-                        getMonthName(DateTime.now().month.toInt());
                     String lastmonthName =
                         getMonthName(DateTime.now().month.toInt() - 1);
-                    double monthlyAverage =
-                        StepsClient().calculateAverageSteps(filteredMonthList);
-                    double monthlyLastAverage = StepsClient()
+                    double monthlyLastAverageBefore = StepsClient()
                         .calculateAverageSteps(filteredLastMonthList);
-                    //WORk
+                    double monthlyLastAverage = double.parse(
+                        (monthlyLastAverageBefore).toStringAsFixed(2));
+
+                    //WORK
                     return Column(
                       children: [
                         Padding(

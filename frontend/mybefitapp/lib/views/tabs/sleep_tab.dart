@@ -25,35 +25,6 @@ class _SleepState extends State<Sleep> {
     _sleepData = SleepClient().checkAndGetSleep(email);
   }
 
-  Duration getDurationBetween(DateTime dateTime1, DateTime dateTime2) {
-    DateTime startDateTime = dateTime1;
-    DateTime endDateTime = dateTime2;
-
-    // Swap the start and end DateTime if necessary
-    if (startDateTime.isAfter(endDateTime)) {
-      DateTime temp = startDateTime;
-      startDateTime = endDateTime;
-      endDateTime = temp;
-    }
-
-    Duration duration = endDateTime.difference(startDateTime);
-    return duration;
-  }
-
-  String getQuality(int hours) {
-    if (hours <= 3) {
-      return "Bad";
-    } else if (hours > 3 && hours <= 6) {
-      return "Average";
-    } else if (hours > 6 && hours <= 9) {
-      return "Good";
-    } else if (hours > 9) {
-      return "Over Sleep";
-    } else {
-      return "Can't measure quality.";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -101,14 +72,16 @@ class _SleepState extends State<Sleep> {
                   final model = snapshot.data!;
                   SleepModel sleepy = sleepModelFromJson(model);
                   DateTime start = sleepy.starttime;
-                  TimeOfDay startingtime =
-                      TimeOfDay.fromDateTime(start.toLocal());
+                  int starthour = start.hour;
+                  int startminute = start.minute;
                   DateTime end = sleepy.endtime;
-                  TimeOfDay endingtime = TimeOfDay.fromDateTime(end.toLocal());
-                  Duration duration = getDurationBetween(start, end);
+                  int endhour = end.hour;
+                  int endminute = end.minute;
+                  Duration duration =
+                      SleepClient().getDurationBetween(start, end);
                   int hours = duration.inHours;
                   int minutes = duration.inMinutes % 60;
-                  String forQuality = getQuality(hours);
+                  String forQuality = SleepClient().getQuality(hours);
                   //REMINDER TO SELF: WORK FOR DISPLAYING BODY MEASUREMENTS HERE
                   return Column(
                     children: [
@@ -143,7 +116,7 @@ class _SleepState extends State<Sleep> {
                                       ),
                                     ),
                                     Text(
-                                      '${startingtime}',
+                                      '${starthour}:${startminute}',
                                       style: const TextStyle(
                                         fontSize: 15.0,
                                       ),
@@ -167,7 +140,7 @@ class _SleepState extends State<Sleep> {
                                       ),
                                     ),
                                     Text(
-                                      '${endingtime}',
+                                      '${endhour}:${endminute}',
                                       style: const TextStyle(
                                         fontSize: 15.0,
                                       ),

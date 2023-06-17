@@ -10,6 +10,7 @@ import 'package:mybefitapp/services/libraries/steps_sensor.dart';
 import 'package:mybefitapp/services/libraries/steps_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
 import 'package:mybefitapp/services/Api/body_api_call.dart';
+import 'package:mybefitapp/views/widgets/monthly_step_chart.dart';
 import 'package:mybefitapp/views/widgets/weekly_step_chart.dart';
 
 class MainHome extends StatefulWidget {
@@ -313,7 +314,7 @@ class _MainHomeState extends State<MainHome> {
                                     borderRadius: BorderRadius.circular(20),
                                     color: Colors.white,
                                   ),
-                                  child: const WeekChart(),
+                                  child: const MonthChart(),
                                 ),
                               ),
                             ],

@@ -32,7 +32,7 @@ class _MonthChartState extends State<MonthChart> {
         elevation: 0.0,
         title: const Text('Monthly Steps'),
       ),
-      backgroundColor: const Color(0xFF1B0E41),
+      backgroundColor: const Color.fromARGB(255, 104, 23, 50),
       body: Center(
         child: Container(
           constraints: const BoxConstraints(
@@ -47,12 +47,13 @@ class _MonthChartState extends State<MonthChart> {
                   final model = snapshot.data!;
                   List<dynamic> stepList = StepsClient().parseJsonToList(model);
                   //WEEK
-                  List<dynamic> filteredList =
-                      StepsClient().filterStepsByMonth(stepList,DateTime.now().month.toInt(),
-                            DateTime.now().year.toInt());
+                  List<dynamic> filteredList = StepsClient().filterStepsByMonth(
+                      stepList,
+                      DateTime.now().month.toInt(),
+                      DateTime.now().year.toInt());
                   List<dynamic> steps =
                       filteredList.map((item) => item["steps"]).toList();
-                      dataList = steps;
+                  dataList = steps;
                   return Chart(
                     layers: layers(),
                     padding:
@@ -101,7 +102,7 @@ class _MonthChartState extends State<MonthChart> {
         items: List.generate(
           dataList.length,
           (index) => ChartBarDataItem(
-            color: const Color(0xFF8043F9),
+            color: const Color.fromARGB(255, 248, 225, 225),
             value: dataList[index] is num ? dataList[index].toDouble() : 0.0,
             x: index.toDouble(),
           ),

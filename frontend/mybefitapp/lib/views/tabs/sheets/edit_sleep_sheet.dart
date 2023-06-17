@@ -214,7 +214,8 @@ class _EditSleepState extends State<EditSleep> {
                                 CoolAlert.show(
                                   context: context,
                                   type: CoolAlertType.success,
-                                  text: "Information has been updated!",
+                                  confirmBtnColor: Colors.pinkAccent,
+                                  text: "Sleep has been updated!",
                                 );
                               },
                               style: ElevatedButton.styleFrom(
