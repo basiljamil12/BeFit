@@ -135,23 +135,26 @@ class StepsClient {
   }
 
   List<dynamic> filterStepsForPreviousWeek(List<dynamic> stepList) {
-  List<dynamic> filteredList = [];
-  DateTime currentDate = DateTime.now();
+    List<dynamic> filteredList = [];
+    DateTime currentDate = DateTime.now();
 
-  // Calculate the start and end dates of the previous week
-  DateTime previousWeekStart = currentDate.subtract(Duration(days: currentDate.weekday + 6));
-  DateTime previousWeekEnd = currentDate.subtract(Duration(days: currentDate.weekday));
+    // Calculate the start and end dates of the previous week
+    DateTime previousWeekStart =
+        currentDate.subtract(Duration(days: currentDate.weekday + 6));
+    DateTime previousWeekEnd =
+        currentDate.subtract(Duration(days: currentDate.weekday));
 
-  for (dynamic step in stepList) {
-    DateTime stepDate = DateFormat('yyyy-MM-dd').parse(step['date']);
+    for (dynamic step in stepList) {
+      DateTime stepDate = DateFormat('yyyy-MM-dd').parse(step['date']);
 
-    if (stepDate.isAfter(previousWeekStart) && stepDate.isBefore(previousWeekEnd)) {
-      filteredList.add(step);
+      if (stepDate.isAfter(previousWeekStart) &&
+          stepDate.isBefore(previousWeekEnd)) {
+        filteredList.add(step);
+      }
     }
-  }
 
-  return filteredList;
-}
+    return filteredList;
+  }
 
   List<dynamic> filterStepsByYear(List<dynamic> stepList, int year) {
     List<dynamic> filteredList = [];
@@ -165,5 +168,48 @@ class StepsClient {
     }
 
     return filteredList;
+  }
+
+  String getWeeklyAverageText(double thisWeek, double lastWeek) {
+    String more = "You're averaging more steps a day this week than last week.";
+    String avg =
+        "You're averaging about the same number of steps this week and last week.";
+    String low = "You're averaging below the steps you take in a week.";
+    if (thisWeek > lastWeek) {
+      return more;
+    } else if (thisWeek == lastWeek) {
+      return avg;
+    } else {
+      return low;
+    }
+  }
+
+  String getMonthyAverageText(double thisMonth, double lastMonth) {
+    String more =
+        "You're averaging more steps a day this month than last month.";
+    String avg =
+        "You're averaging about the same number of steps this month and last month.";
+    String low = "You're averaging below the steps you take in a month.";
+    if (thisMonth > lastMonth) {
+      return more;
+    } else if (thisMonth == lastMonth) {
+      return avg;
+    } else {
+      return low;
+    }
+  }
+
+  String getYearlyAverageText(double thisYear, double lastYear) {
+    String more = "You're averaging more steps a day this year than last year.";
+    String avg =
+        "You're averaging about the same number of steps this year and last year.";
+    String low = "You're averaging below the steps you take in a year.";
+    if (thisYear > lastYear) {
+      return more;
+    } else if (thisYear == lastYear) {
+      return avg;
+    } else {
+      return low;
+    }
   }
 }

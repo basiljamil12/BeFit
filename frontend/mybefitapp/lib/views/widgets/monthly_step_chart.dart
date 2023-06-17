@@ -77,8 +77,8 @@ class _MonthChartState extends State<MonthChart> {
       ChartAxisLayer(
         settings: ChartAxisSettings(
           x: ChartAxisSettingsAxis(
-            frequency: 8.0,
-            max: 29.0,
+            frequency: 5.0,
+            max: 30.0,
             min: 0.0,
             textStyle: TextStyle(
               color: Colors.white.withOpacity(0.6),
@@ -86,8 +86,13 @@ class _MonthChartState extends State<MonthChart> {
             ),
           ),
           y: ChartAxisSettingsAxis(
-            frequency: 50.0,
-            max: 300,
+            frequency: 100.0,
+            max: dataList
+                .reduce((currentMax, element) =>
+                    currentMax is num && element is num
+                        ? (currentMax > element ? currentMax : element)
+                        : currentMax)
+                .toDouble(),
             min: 0.0,
             textStyle: TextStyle(
               color: Colors.white.withOpacity(0.6),

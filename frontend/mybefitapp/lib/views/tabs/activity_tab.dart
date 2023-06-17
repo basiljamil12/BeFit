@@ -33,17 +33,16 @@ class _ActivityState extends State<Activity> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.8,
       decoration: BoxDecoration(
-    borderRadius: const BorderRadius.only(
-      topLeft: Radius.circular(25.0),
-      topRight: Radius.circular(25.0),
-    ),
-    color: Styles.bgColor,
-    border: Border.all(
-      width: 1.0,
-      color: Colors.black,
-    ),
-  ),
-      
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
+        ),
+        color: Styles.bgColor,
+        border: Border.all(
+          width: 1.0,
+          color: Colors.black,
+        ),
+      ),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -103,6 +102,9 @@ class _ActivityState extends State<Activity> {
                     double pastWeeklyAverage = double.parse(
                         (pastWeeklyAverageBefore).toStringAsFixed(2));
 
+                    String weekText = StepsClient()
+                        .getWeeklyAverageText(weeklyAverage, pastWeeklyAverage);
+
                     //YEAR
                     List<dynamic> filteredYearList = StepsClient()
                         .filterStepsByYear(
@@ -120,6 +122,9 @@ class _ActivityState extends State<Activity> {
                         .calculateAverageSteps(filteredLastYearList);
                     double yearlyLastAverage = double.parse(
                         (yearlyLastAverageBefore).toStringAsFixed(2));
+
+                    String yearText = StepsClient()
+                        .getYearlyAverageText(yearlyAverage, yearlyLastAverage);
 
                     //MONTH
                     List<dynamic> filteredMonthList = StepsClient()
@@ -146,6 +151,9 @@ class _ActivityState extends State<Activity> {
                         .calculateAverageSteps(filteredLastMonthList);
                     double monthlyLastAverage = double.parse(
                         (monthlyLastAverageBefore).toStringAsFixed(2));
+
+                    String monthText = StepsClient().getMonthyAverageText(
+                        monthlyAverage, monthlyLastAverage);
 
                     //WORK
                     return Column(
@@ -231,7 +239,7 @@ class _ActivityState extends State<Activity> {
                                 padding: const EdgeInsets.fromLTRB(
                                     5.0, 8.0, 5.0, 8.0),
                                 child: Text(
-                                  "You're averaging more steps a day this year than last year.",
+                                  weekText,
                                 ),
                               ),
                               Row(
@@ -241,13 +249,13 @@ class _ActivityState extends State<Activity> {
                                         8.0, 8.0, 4.0, 8.0),
                                     child: Text(
                                       weeklyAverage.toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     'steps/day',
                                   ),
                                 ],
@@ -258,8 +266,8 @@ class _ActivityState extends State<Activity> {
                                   color: Colors.pinkAccent,
                                 ),
                                 width: 280,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text('This Week'),
                                 ),
                               ),
@@ -271,13 +279,13 @@ class _ActivityState extends State<Activity> {
                                         8.0, 8.0, 4.0, 8.0),
                                     child: Text(
                                       pastWeeklyAverage.toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     'steps/day',
                                   ),
                                 ],
@@ -288,8 +296,8 @@ class _ActivityState extends State<Activity> {
                                   color: Colors.grey,
                                 ),
                                 width: 280,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text('Last Week'),
                                 ),
                               ),
@@ -328,7 +336,7 @@ class _ActivityState extends State<Activity> {
                                 padding: const EdgeInsets.fromLTRB(
                                     5.0, 8.0, 5.0, 8.0),
                                 child: Text(
-                                  "You're averaging more steps a day this year than last year.",
+                                  monthText,
                                 ),
                               ),
                               Row(
@@ -338,13 +346,13 @@ class _ActivityState extends State<Activity> {
                                         8.0, 8.0, 4.0, 8.0),
                                     child: Text(
                                       monthlyAverage.toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     'steps/day',
                                   ),
                                 ],
@@ -368,13 +376,13 @@ class _ActivityState extends State<Activity> {
                                         8.0, 8.0, 4.0, 8.0),
                                     child: Text(
                                       monthlyLastAverage.toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     'steps/day',
                                   ),
                                 ],
@@ -425,7 +433,7 @@ class _ActivityState extends State<Activity> {
                                 padding: const EdgeInsets.fromLTRB(
                                     5.0, 8.0, 5.0, 8.0),
                                 child: Text(
-                                  "You're averaging more steps a day this year than last year.",
+                                  yearText,
                                 ),
                               ),
                               Row(
@@ -435,13 +443,13 @@ class _ActivityState extends State<Activity> {
                                         8.0, 8.0, 4.0, 8.0),
                                     child: Text(
                                       yearlyAverage.toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     'steps/day',
                                   ),
                                 ],
@@ -465,13 +473,13 @@ class _ActivityState extends State<Activity> {
                                         8.0, 8.0, 4.0, 8.0),
                                     child: Text(
                                       yearlyLastAverage.toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     'steps/day',
                                   ),
                                 ],
