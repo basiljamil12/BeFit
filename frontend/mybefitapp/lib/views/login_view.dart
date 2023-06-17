@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/utilities/constant_routes.dart';
+import 'package:mybefitapp/views/homescreen_view.dart';
+import 'package:mybefitapp/views/verify_email_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -129,6 +131,17 @@ class _LoginViewState extends State<LoginView> {
                             );
                             final user = AuthService.firebase().currentUser;
                             if (user != null) {
+                              if (user.isEmailVerified) {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                  homeScreen,
+                                  (route) => false,
+                                );
+                              } else {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                  verifyEmail,
+                                  (route) => false,
+                                );
+                              }
                               Navigator.of(context).pushNamedAndRemoveUntil(
                                 homeScreen,
                                 (route) => false,

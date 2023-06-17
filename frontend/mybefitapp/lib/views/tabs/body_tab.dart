@@ -60,7 +60,17 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.8,
-      color: Styles.bgColor,
+      decoration: BoxDecoration(
+    borderRadius: const BorderRadius.only(
+      topLeft: Radius.circular(25.0),
+      topRight: Radius.circular(25.0),
+    ),
+    color: Styles.bgColor,
+    border: Border.all(
+      width: 1.0,
+      color: Colors.black,
+    ),
+  ),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -366,7 +376,7 @@ class _BodyState extends State<Body> {
                   Padding(
                     padding: EdgeInsets.all(12.0),
                     child: Text(
-                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'),
+                        'The "Body Measurements" tab in BeFit tracks and displays height, weight, and BMI (Body Mass Index) for users to monitor their physical changes and make informed decisions about their fitness and health goals.'),
                   ),
                 ],
               ),

@@ -32,7 +32,18 @@ class _ActivityState extends State<Activity> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.8,
-      color: Styles.bgColor,
+      decoration: BoxDecoration(
+    borderRadius: const BorderRadius.only(
+      topLeft: Radius.circular(25.0),
+      topRight: Radius.circular(25.0),
+    ),
+    color: Styles.bgColor,
+    border: Border.all(
+      width: 1.0,
+      color: Colors.black,
+    ),
+  ),
+      
       child: SingleChildScrollView(
         child: Column(
           children: [

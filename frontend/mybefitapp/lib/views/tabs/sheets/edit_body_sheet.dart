@@ -46,7 +46,17 @@ class _EditBodyState extends State<EditBody> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,
-      color: Styles.bgColor,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
+        ),
+        color: Styles.bgColor,
+        border: Border.all(
+          width: 1.0,
+          color: Colors.black,
+        ),
+      ),
       child: SingleChildScrollView(
         child: FutureBuilder(
             future: _bodyData,
@@ -171,11 +181,15 @@ class _EditBodyState extends State<EditBody> {
                                     .putBodyApi(body, id)
                                     .catchError((e) {});
                                 if (response == null) return;
-                                //DIALOG BOX THAT DISPLAYS 'SAVED'
-                                CoolAlert.show(
+
+                                await CoolAlert.show(
                                   context: context,
                                   type: CoolAlertType.success,
+                                  confirmBtnColor: Colors.pinkAccent,
                                   text: "Information has been saved!",
+                                  onConfirmBtnTap: () {
+                                    Navigator.of(context).pop();// Pops two screens
+                                  },
                                 );
                               },
                               style: ElevatedButton.styleFrom(

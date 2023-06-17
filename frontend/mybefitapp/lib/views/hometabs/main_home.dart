@@ -9,7 +9,8 @@ import 'package:mybefitapp/services/libraries/body_service.dart';
 import 'package:mybefitapp/services/libraries/steps_sensor.dart';
 import 'package:mybefitapp/services/libraries/steps_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
-import 'package:mybefitapp/services/Api/body_api_call.dart';
+import 'package:mybefitapp/views/tabs/activity_tab.dart';
+import 'package:mybefitapp/views/tabs/body_tab.dart';
 import 'package:mybefitapp/views/widgets/monthly_step_chart.dart';
 import 'package:mybefitapp/views/widgets/weekly_step_chart.dart';
 
@@ -165,6 +166,24 @@ class _MainHomeState extends State<MainHome> {
                           ),
                           padding: const EdgeInsets.all(10.0),
                           child: ListTile(
+                            onTap: () {
+                        showModalBottomSheet<void>(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25.0),
+                              topRight: Radius.circular(25.0),
+                            ),
+                          ),
+                          isScrollControlled: true,
+                          useRootNavigator: true,
+                          useSafeArea: true,
+                          enableDrag: true,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const Activity();
+                          },
+                        );
+                      },
                             leading: const Icon(
                               Icons.local_fire_department_rounded,
                               color: Colors.pinkAccent,
@@ -209,6 +228,24 @@ class _MainHomeState extends State<MainHome> {
                           ),
                           padding: const EdgeInsets.all(10.0),
                           child: ListTile(
+                            onTap: () {
+                        showModalBottomSheet<void>(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25.0),
+                              topRight: Radius.circular(25.0),
+                            ),
+                          ),
+                          isScrollControlled: true,
+                          useRootNavigator: true,
+                          useSafeArea: true,
+                          enableDrag: true,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const Body();
+                          },
+                        );
+                      },
                             leading: const Icon(
                               Icons.fitness_center,
                               color: Colors.pinkAccent,
@@ -249,6 +286,24 @@ class _MainHomeState extends State<MainHome> {
                           ),
                           padding: const EdgeInsets.all(10.0),
                           child: ListTile(
+                            onTap: () {
+                        showModalBottomSheet<void>(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25.0),
+                              topRight: Radius.circular(25.0),
+                            ),
+                          ),
+                          isScrollControlled: true,
+                          useRootNavigator: true,
+                          useSafeArea: true,
+                          enableDrag: true,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const Body();
+                          },
+                        );
+                      },
                             leading: const Icon(
                               Icons.directions_run_rounded,
                               color: Colors.pinkAccent,
@@ -289,6 +344,22 @@ class _MainHomeState extends State<MainHome> {
                           endIndent: 20,
                         ),
                         const SizedBox(height: 15),
+                        Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 25.0, 0.0),
+                    child: Row(
+                      children: const [
+                        Center(
+                          child: Text(
+                            'Highlights',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30.0,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                         Container(
                           margin: const EdgeInsets.symmetric(vertical: 20.0),
                           height: 240.0,

@@ -66,13 +66,8 @@ class _EditUserState extends State<EditUser> {
                   if (snapshot.hasData) {
                     final model = snapshot.data!;
                     UserModel jsonDataa = userModelFromJson(model);
-                    String name = jsonDataa.name;
-                    String password = jsonDataa.password;
                     String dob = jsonDataa.dob.toString();
                     String id = jsonDataa.id.toString();
-
-                    _name.text = name;
-                    _password.text = password;
                     _dob.text = dob;
                     return Column(
                       children: [
@@ -252,12 +247,17 @@ class _EditUserState extends State<EditUser> {
                                     var response = await BaseUserClient()
                                         .putUserApi(user, id)
                                         .catchError((e) {});
+                                        print(response);
                                     if (response == null) return;
                                     //DIALOG BOX THAT DISPLAYS 'SAVED'
                                     CoolAlert.show(
                                       context: context,
                                       type: CoolAlertType.success,
-                                      text: "Information has been saved!",
+                                      confirmBtnColor: Colors.pinkAccent,
+                                      text: "Information has been updated!",
+                                      onConfirmBtnTap: () {
+                                    Navigator.of(context).pop();// Pops two screens
+                                  },
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(

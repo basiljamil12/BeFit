@@ -4,6 +4,7 @@ import 'package:mybefitapp/views/homescreen_view.dart';
 import 'package:mybefitapp/views/login_view.dart';
 import 'package:mybefitapp/views/register_view.dart';
 import 'package:mybefitapp/utilities/constant_routes.dart';
+import 'package:mybefitapp/views/verify_email_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         registerScreen: (context) => const RegisterView(),
         homeScreen: (context) => const HomePage(),
         loginScreen: (context) => const LoginView(),
+        verifyEmail: (context) => const VerifyEmail(),
       },
     );
   }

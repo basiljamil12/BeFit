@@ -112,6 +112,29 @@ class _VerifyEmailState extends State<VerifyEmail> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      onPressed: () async {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                                  loginScreen,
+                                  (route) => false,
+                                );
+                      },
+                      style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      child: ShaderMask(
+                        shaderCallback: (bounds) => const LinearGradient(
+                          colors: [Colors.red, Colors.pinkAccent],
+                        ).createShader(bounds),
+                        child: const Text(
+                            "Verified? Go back to Login Screen."),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

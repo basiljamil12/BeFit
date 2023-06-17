@@ -7,6 +7,7 @@ import 'package:mybefitapp/utilities/app_styles.dart';
 import 'package:mybefitapp/views/tabs/sheets/add_sleep_sheet.dart';
 import 'package:mybefitapp/views/tabs/sheets/edit_sleep_sheet.dart';
 
+
 class Sleep extends StatefulWidget {
   const Sleep({super.key});
 
@@ -29,7 +30,17 @@ class _SleepState extends State<Sleep> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.8,
-      color: Styles.bgColor,
+      decoration: BoxDecoration(
+    borderRadius: const BorderRadius.only(
+      topLeft: Radius.circular(25.0),
+      topRight: Radius.circular(25.0),
+    ),
+    color: Styles.bgColor,
+    border: Border.all(
+      width: 1.0,
+      color: Colors.black,
+    ),
+  ),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -362,7 +373,7 @@ class _SleepState extends State<Sleep> {
                   Padding(
                     padding: EdgeInsets.all(12.0),
                     child: Text(
-                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'),
+                        'Sleep provides insight into your sleep habits. Sleep trackers and monitors can help you determine the amount of time you are in bed and asleep. These devices estimate your time in bed and your time asleep by analyzing changes in physical actvitiy, including movement during the night. You can also keep track of your sleep by entering your own estimation of your bed time and sleep time manually.'),
                   ),
                 ],
               ),
