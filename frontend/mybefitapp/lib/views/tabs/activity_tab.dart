@@ -7,6 +7,8 @@ import 'package:mybefitapp/services/Api/step_api_call.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/services/libraries/steps_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
+import 'package:mybefitapp/views/widgets/monthly_step_chart.dart';
+import 'package:mybefitapp/views/widgets/weekly_step_chart.dart';
 
 class Activity extends StatefulWidget {
   const Activity({super.key});
@@ -82,17 +84,32 @@ class _ActivityState extends State<Activity> {
                         StepsClient().filterStepsList(stepList);
                     double weeklyAverage =
                         StepsClient().calculateAverageSteps(filteredList);
+                    //LAST WEEK
+                    List<dynamic> filteredPastWeekList =
+                        StepsClient().filterStepsForPreviousWeek(stepList);
+                    double pastWeeklyAverage = StepsClient()
+                        .calculateAverageSteps(filteredPastWeekList);
                     //YEAR
                     List<dynamic> filteredYearList = StepsClient()
                         .filterStepsByYear(
                             stepList, DateTime.now().year.toInt());
                     double yearlyAverage =
                         StepsClient().calculateAverageSteps(filteredYearList);
+                    List<dynamic> filteredLastYearList = StepsClient()
+                        .filterStepsByYear(
+                            stepList, DateTime.now().year.toInt() - 1);
+                    double yearlyLastAverage = StepsClient()
+                        .calculateAverageSteps(filteredLastYearList);
                     //MONTH
                     List<dynamic> filteredMonthList = StepsClient()
                         .filterStepsByMonth(
                             stepList,
                             DateTime.now().month.toInt(),
+                            DateTime.now().year.toInt());
+                    List<dynamic> filteredLastMonthList = StepsClient()
+                        .filterStepsByMonth(
+                            stepList,
+                            DateTime.now().month.toInt() - 1,
                             DateTime.now().year.toInt());
                     String monthName =
                         getMonthName(DateTime.now().month.toInt());
@@ -100,8 +117,46 @@ class _ActivityState extends State<Activity> {
                         getMonthName(DateTime.now().month.toInt() - 1);
                     double monthlyAverage =
                         StepsClient().calculateAverageSteps(filteredMonthList);
+                    double monthlyLastAverage = StepsClient()
+                        .calculateAverageSteps(filteredLastMonthList);
+                    //WORk
                     return Column(
                       children: [
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(20.0, 0.0, 15.0, 10.0),
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(vertical: 20.0),
+                            height: 240.0,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10.0),
+                                  child: Container(
+                                    width: 265.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                    ),
+                                    child: const WeekChart(),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: Container(
+                                    width: 265.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                    ),
+                                    child: const MonthChart(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                         Row(
                           children: const [
                             Padding(
@@ -187,7 +242,7 @@ class _ActivityState extends State<Activity> {
                                     padding: const EdgeInsets.fromLTRB(
                                         8.0, 8.0, 4.0, 8.0),
                                     child: Text(
-                                      weeklyAverage.toString(),
+                                      pastWeeklyAverage.toString(),
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -254,7 +309,7 @@ class _ActivityState extends State<Activity> {
                                     padding: const EdgeInsets.fromLTRB(
                                         8.0, 8.0, 4.0, 8.0),
                                     child: Text(
-                                      weeklyAverage.toString(),
+                                      monthlyAverage.toString(),
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -284,7 +339,7 @@ class _ActivityState extends State<Activity> {
                                     padding: const EdgeInsets.fromLTRB(
                                         8.0, 8.0, 4.0, 8.0),
                                     child: Text(
-                                      weeklyAverage.toString(),
+                                      monthlyLastAverage.toString(),
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -351,7 +406,7 @@ class _ActivityState extends State<Activity> {
                                     padding: const EdgeInsets.fromLTRB(
                                         8.0, 8.0, 4.0, 8.0),
                                     child: Text(
-                                      weeklyAverage.toString(),
+                                      yearlyAverage.toString(),
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -381,7 +436,7 @@ class _ActivityState extends State<Activity> {
                                     padding: const EdgeInsets.fromLTRB(
                                         8.0, 8.0, 4.0, 8.0),
                                     child: Text(
-                                      weeklyAverage.toString(),
+                                      yearlyLastAverage.toString(),
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -408,6 +463,33 @@ class _ActivityState extends State<Activity> {
                             ],
                           ),
                         ),
+                        const SizedBox(height: 10.0),
+                        Container(
+                          padding: const EdgeInsets.all(12.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            color: Colors.white,
+                          ),
+                          width: 320,
+                          child: Column(
+                            children: const [
+                              Text(
+                                'About Steps',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Padding(
+                                padding: EdgeInsets.all(12.0),
+                                child: Text(
+                                    'Step count is the number of steps you take throughout the day. Pedometers and digital activity trackers can help you determine your step count. these devices count steps for any activity that involves step-like movement, including walking, running, stair-climbing, cross-country skiing, and even movement as you go about your daily chores.'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 15),
                       ],
                     );
                   } else if (snapshot.hasError) {

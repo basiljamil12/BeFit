@@ -134,6 +134,25 @@ class StepsClient {
     return filteredList;
   }
 
+  List<dynamic> filterStepsForPreviousWeek(List<dynamic> stepList) {
+  List<dynamic> filteredList = [];
+  DateTime currentDate = DateTime.now();
+
+  // Calculate the start and end dates of the previous week
+  DateTime previousWeekStart = currentDate.subtract(Duration(days: currentDate.weekday + 6));
+  DateTime previousWeekEnd = currentDate.subtract(Duration(days: currentDate.weekday));
+
+  for (dynamic step in stepList) {
+    DateTime stepDate = DateFormat('yyyy-MM-dd').parse(step['date']);
+
+    if (stepDate.isAfter(previousWeekStart) && stepDate.isBefore(previousWeekEnd)) {
+      filteredList.add(step);
+    }
+  }
+
+  return filteredList;
+}
+
   List<dynamic> filterStepsByYear(List<dynamic> stepList, int year) {
     List<dynamic> filteredList = [];
 
