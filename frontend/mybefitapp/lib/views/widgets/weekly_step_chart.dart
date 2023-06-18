@@ -84,7 +84,7 @@ class _WeekChartState extends State<WeekChart> {
             ),
           ),
           y: ChartAxisSettingsAxis(
-            frequency: 20.0,
+            frequency: 100.0,
             max: dataList
                 .reduce((currentMax, element) =>
                     currentMax is num && element is num
