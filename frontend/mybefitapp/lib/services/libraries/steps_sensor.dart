@@ -5,6 +5,7 @@ class StepTracker {
   int _steps = 0;
   AccelerometerEvent? _lastEvent;
   final double _threshold = 20.0; // Adjust this value based on your needs
+  final double _upperthreshold = 50.0;
   late StreamSubscription<AccelerometerEvent> _subscription;
 
   void startTracking() {
@@ -19,7 +20,7 @@ class StepTracker {
 
       final double acceleration =
           deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
-      if (acceleration > _threshold) {
+      if (acceleration > _threshold && acceleration < _upperthreshold) {
         _steps++;
       }
     }
