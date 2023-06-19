@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mybefitapp/views/controlflow/main_redirect.dart';
 import 'package:mybefitapp/views/homescreen_view.dart';
 import 'package:mybefitapp/views/login_view.dart';
 import 'package:mybefitapp/views/register_view.dart';
 import 'package:mybefitapp/utilities/constant_routes.dart';
 import 'package:mybefitapp/views/verify_email_view.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 void main() {
   runApp(const MyApp());

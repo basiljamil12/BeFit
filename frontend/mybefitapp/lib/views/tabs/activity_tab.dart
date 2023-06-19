@@ -21,6 +21,14 @@ class _ActivityState extends State<Activity> {
     return DateFormat('MMMM').format(DateTime(0, monthNumber));
   }
 
+  double getNotNan(double Average) {
+    if (Average.isNaN) {
+      return 0.00;
+    } else {
+      return Average;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -242,6 +250,11 @@ class _ActivityState extends State<Activity> {
                                   weekText,
                                 ),
                               ),
+                              const Divider(
+                                color: Colors.grey,
+                                indent: 10,
+                                endIndent: 10,
+                              ),
                               Row(
                                 children: [
                                   Padding(
@@ -278,7 +291,7 @@ class _ActivityState extends State<Activity> {
                                     padding: const EdgeInsets.fromLTRB(
                                         8.0, 8.0, 4.0, 8.0),
                                     child: Text(
-                                      pastWeeklyAverage.toString(),
+                                      getNotNan(pastWeeklyAverage).toString(),
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -339,6 +352,11 @@ class _ActivityState extends State<Activity> {
                                   monthText,
                                 ),
                               ),
+                              const Divider(
+                                color: Colors.grey,
+                                indent: 10,
+                                endIndent: 10,
+                              ),
                               Row(
                                 children: [
                                   Padding(
@@ -375,7 +393,7 @@ class _ActivityState extends State<Activity> {
                                     padding: const EdgeInsets.fromLTRB(
                                         8.0, 8.0, 4.0, 8.0),
                                     child: Text(
-                                      monthlyLastAverage.toString(),
+                                      getNotNan(monthlyLastAverage).toString(),
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -436,6 +454,11 @@ class _ActivityState extends State<Activity> {
                                   yearText,
                                 ),
                               ),
+                              const Divider(
+                                color: Colors.grey,
+                                indent: 10,
+                                endIndent: 10,
+                              ),
                               Row(
                                 children: [
                                   Padding(
@@ -472,7 +495,7 @@ class _ActivityState extends State<Activity> {
                                     padding: const EdgeInsets.fromLTRB(
                                         8.0, 8.0, 4.0, 8.0),
                                     child: Text(
-                                      yearlyLastAverage.toString(),
+                                      getNotNan(yearlyLastAverage).toString(),
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,

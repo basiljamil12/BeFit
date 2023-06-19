@@ -47,16 +47,16 @@ class _EditSleepState extends State<EditSleep> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,
       decoration: BoxDecoration(
-    borderRadius: const BorderRadius.only(
-      topLeft: Radius.circular(25.0),
-      topRight: Radius.circular(25.0),
-    ),
-    color: Styles.bgColor,
-    border: Border.all(
-      width: 1.0,
-      color: Colors.black,
-    ),
-  ),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
+        ),
+        color: Styles.bgColor,
+        border: Border.all(
+          width: 1.0,
+          color: Colors.black,
+        ),
+      ),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -149,10 +149,11 @@ class _EditSleepState extends State<EditSleep> {
                                     currentDateTime.day,
                                     selectedTime.hour,
                                     selectedTime.minute,
-                                  ).toUtc();
+                                  ).add(currentDateTime.timeZoneOffset);
                                 }
                                 setState(() {
-                                  _starttime.text = combinedDateTime.toString();
+                                  _starttime.text =
+                                      combinedDateTime.toString() + 'Z';
                                 });
                               },
                             ), //GET SLEEP START TIME HERE
@@ -190,10 +191,11 @@ class _EditSleepState extends State<EditSleep> {
                                     currentDateTime.day,
                                     selectedTime.hour,
                                     selectedTime.minute,
-                                  ).toUtc();
+                                  ).add(currentDateTime.timeZoneOffset);
                                 }
                                 setState(() {
-                                  _endtime.text = combinedDateTime.toString();
+                                  _endtime.text =
+                                      combinedDateTime.toString() + 'Z';
                                 });
                               },
                             ), //GET SLEEP END TIME HERE
@@ -227,7 +229,8 @@ class _EditSleepState extends State<EditSleep> {
                                   confirmBtnColor: Colors.pinkAccent,
                                   text: "Sleep has been updated!",
                                   onConfirmBtnTap: () {
-                                    Navigator.of(context).pop();// Pops two screens
+                                    Navigator.of(context)
+                                        .pop(); // Pops two screens
                                   },
                                 );
                               },

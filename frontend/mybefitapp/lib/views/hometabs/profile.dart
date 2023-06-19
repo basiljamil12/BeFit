@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mybefitapp/model/user_model.dart';
@@ -488,10 +489,20 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           child: ElevatedButton(
                             onPressed: () async {
-                              await AuthService.firebase().logOut();
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                loginScreen,
-                                (route) => false,
+                              CoolAlert.show(
+                                context: context,
+                                type: CoolAlertType.confirm,
+                                text: 'Do you want to logout',
+                                confirmBtnText: 'Yes',
+                                cancelBtnText: 'No',
+                                confirmBtnColor: Colors.pink,
+                                onConfirmBtnTap: () async {
+                                  await AuthService.firebase().logOut();
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                    loginScreen,
+                                    (route) => false,
+                                  );
+                                },
                               );
                             },
                             style: ElevatedButton.styleFrom(

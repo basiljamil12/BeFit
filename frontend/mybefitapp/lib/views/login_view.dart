@@ -142,10 +142,6 @@ class _LoginViewState extends State<LoginView> {
                                   (route) => false,
                                 );
                               }
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                homeScreen,
-                                (route) => false,
-                              );
                             }
                           } catch (e) {
                             print(e);

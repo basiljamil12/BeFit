@@ -43,16 +43,16 @@ class _AddSleepState extends State<AddSleep> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,
       decoration: BoxDecoration(
-    borderRadius: const BorderRadius.only(
-      topLeft: Radius.circular(25.0),
-      topRight: Radius.circular(25.0),
-    ),
-    color: Styles.bgColor,
-    border: Border.all(
-      width: 1.0,
-      color: Colors.black,
-    ),
-  ),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
+        ),
+        color: Styles.bgColor,
+        border: Border.all(
+          width: 1.0,
+          color: Colors.black,
+        ),
+      ),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -136,10 +136,10 @@ class _AddSleepState extends State<AddSleep> {
                             currentDateTime.day,
                             selectedTime.hour,
                             selectedTime.minute,
-                          ).toUtc();
+                          ).add(currentDateTime.timeZoneOffset);
                         }
                         setState(() {
-                          _starttime.text = combinedDateTime.toString();
+                          _starttime.text = combinedDateTime.toString() + 'Z';
                         });
                       },
                     ), //GET SLEEP START TIME HERE
@@ -175,10 +175,10 @@ class _AddSleepState extends State<AddSleep> {
                             currentDateTime.day,
                             selectedTime.hour,
                             selectedTime.minute,
-                          ).toUtc();
+                          ).add(currentDateTime.timeZoneOffset);
                         }
                         setState(() {
-                          _endtime.text = combinedDateTime.toString();
+                          _endtime.text = combinedDateTime.toString() + 'Z';
                         });
                       },
                     ), //GET SLEEP END TIME HERE
@@ -204,7 +204,6 @@ class _AddSleepState extends State<AddSleep> {
                         var response = await BaseSleepClient()
                             .postSleepApi(sleep)
                             .catchError((e) {});
-                        print(response);
                         if (response == null) return;
                         //DIALOG BOX THAT DISPLAYS 'SAVED'
                         CoolAlert.show(
@@ -213,8 +212,8 @@ class _AddSleepState extends State<AddSleep> {
                           confirmBtnColor: Colors.pinkAccent,
                           text: "Information has been saved!",
                           onConfirmBtnTap: () {
-                                    Navigator.of(context).pop();// Pops two screens
-                                  },
+                            Navigator.of(context).pop(); // Pops two screens
+                          },
                         );
                       },
                       style: ElevatedButton.styleFrom(

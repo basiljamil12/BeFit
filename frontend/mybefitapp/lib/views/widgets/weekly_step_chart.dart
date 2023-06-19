@@ -14,6 +14,7 @@ class WeekChart extends StatefulWidget {
 
 class _WeekChartState extends State<WeekChart> {
   List<dynamic> dataList = [];
+  bool check = false;
   late Future<dynamic> _stepData;
   String email = AuthService.firebase().currentUser?.email.toString() ?? '';
 
@@ -52,6 +53,11 @@ class _WeekChartState extends State<WeekChart> {
                   List<dynamic> steps =
                       filteredList.map((item) => item["steps"]).toList();
                   dataList = steps;
+                  if (dataList.isEmpty) {
+                    check = false;
+                  } else {
+                    check = true;
+                  }
                   return Chart(
                     layers: layers(),
                     padding:
@@ -85,12 +91,14 @@ class _WeekChartState extends State<WeekChart> {
           ),
           y: ChartAxisSettingsAxis(
             frequency: 100.0,
-            max: dataList
-                .reduce((currentMax, element) =>
-                    currentMax is num && element is num
-                        ? (currentMax > element ? currentMax : element)
-                        : currentMax)
-                .toDouble(),
+            max: check
+                ? 800.0
+                : dataList
+                    .reduce((currentMax, element) =>
+                        currentMax is num && element is num
+                            ? (currentMax > element ? currentMax : element)
+                            : currentMax)
+                    .toDouble(),
             min: 0.0,
             textStyle: TextStyle(
               color: Colors.white.withOpacity(0.6),

@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:mybefitapp/main.dart';
 import 'package:mybefitapp/model/sleep_model.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/services/libraries/sleep_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
+import 'package:mybefitapp/utilities/notifications.dart';
 import 'package:mybefitapp/views/tabs/sheets/add_sleep_sheet.dart';
 import 'package:mybefitapp/views/tabs/sheets/edit_sleep_sheet.dart';
-
 
 class Sleep extends StatefulWidget {
   const Sleep({super.key});
@@ -22,8 +24,21 @@ class _SleepState extends State<Sleep> {
   @override
   void initState() {
     super.initState();
+    Notifications.initialize(flutterLocalNotificationsPlugin);
     //REMINDER TO SELF: INSTEAD OF TYPED EMAIL, USE VARIABLE WHEN WORKING ON DISPLAYING BODY MEASUREMENTS
     _sleepData = SleepClient().checkAndGetSleep(email);
+  }
+
+  String convertToAmPmFormat(String time) {
+    DateFormat inputFormat =
+        DateFormat.Hm(); // Input format: 24-hour format (e.g., 14:30)
+    DateFormat outputFormat =
+        DateFormat.jm(); // Output format: AM/PM format (e.g., 2:30 PM)
+
+    DateTime dateTime = inputFormat.parse(time);
+    String amPmTime = outputFormat.format(dateTime);
+
+    return amPmTime;
   }
 
   @override
@@ -31,16 +46,16 @@ class _SleepState extends State<Sleep> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.8,
       decoration: BoxDecoration(
-    borderRadius: const BorderRadius.only(
-      topLeft: Radius.circular(25.0),
-      topRight: Radius.circular(25.0),
-    ),
-    color: Styles.bgColor,
-    border: Border.all(
-      width: 1.0,
-      color: Colors.black,
-    ),
-  ),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
+        ),
+        color: Styles.bgColor,
+        border: Border.all(
+          width: 1.0,
+          color: Colors.black,
+        ),
+      ),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -127,7 +142,8 @@ class _SleepState extends State<Sleep> {
                                       ),
                                     ),
                                     Text(
-                                      '${starthour}:${startminute}',
+                                      convertToAmPmFormat(
+                                          '${starthour}:${startminute}'),
                                       style: const TextStyle(
                                         fontSize: 15.0,
                                       ),
@@ -151,7 +167,8 @@ class _SleepState extends State<Sleep> {
                                       ),
                                     ),
                                     Text(
-                                      '${endhour}:${endminute}',
+                                      convertToAmPmFormat(
+                                          '${endhour}:${endminute}'),
                                       style: const TextStyle(
                                         fontSize: 15.0,
                                       ),

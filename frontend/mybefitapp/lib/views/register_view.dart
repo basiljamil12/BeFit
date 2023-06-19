@@ -367,9 +367,8 @@ class _RegisterViewState extends State<RegisterView> {
                                       .postUserApi(user)
                                       .catchError((e) {});
                                   if (response == null) return;
-                                  await AuthService.firebase().logOut();
                                   Navigator.of(context).pushNamedAndRemoveUntil(
-                                      loginScreen, (route) => false);
+                                      verifyEmail, (route) => false);
                                 }
                               } catch (e) {
                                 print(e);

@@ -116,10 +116,11 @@ class _VerifyEmailState extends State<VerifyEmail> {
                     width: double.infinity,
                     child: TextButton(
                       onPressed: () async {
+                        await AuthService.firebase().logOut();
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                                  loginScreen,
-                                  (route) => false,
-                                );
+                          loginScreen,
+                          (route) => false,
+                        );
                       },
                       style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -130,8 +131,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                         shaderCallback: (bounds) => const LinearGradient(
                           colors: [Colors.red, Colors.pinkAccent],
                         ).createShader(bounds),
-                        child: const Text(
-                            "Verified? Go back to Login Screen."),
+                        child: const Text("Verified? Go back to Login Screen."),
                       ),
                     ),
                   ),
