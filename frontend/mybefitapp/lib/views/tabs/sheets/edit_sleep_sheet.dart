@@ -220,7 +220,19 @@ class _EditSleepState extends State<EditSleep> {
                                 SleepModel sleep = createSleepModel();
                                 var response = await BaseSleepClient()
                                     .putSleepApi(sleep, id)
-                                    .catchError((e) {});
+                                    .catchError((e) {
+                                  CoolAlert.show(
+                                    context: context,
+                                    type: CoolAlertType.error,
+                                    confirmBtnColor: Colors.pinkAccent,
+                                    text: e,
+                                    onConfirmBtnTap: () {
+                                      int count = 0;
+                                      Navigator.of(context)
+                                          .popUntil((_) => count++ >= 2);
+                                    },
+                                  );
+                                });
                                 if (response == null) return;
                                 //DIALOG BOX THAT DISPLAYS 'SAVED'
                                 CoolAlert.show(
@@ -229,8 +241,9 @@ class _EditSleepState extends State<EditSleep> {
                                   confirmBtnColor: Colors.pinkAccent,
                                   text: "Sleep has been updated!",
                                   onConfirmBtnTap: () {
+                                    int count = 0;
                                     Navigator.of(context)
-                                        .pop(); // Pops two screens
+                                        .popUntil((_) => count++ >= 2);
                                   },
                                 );
                               },
@@ -254,7 +267,12 @@ class _EditSleepState extends State<EditSleep> {
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else {
-                        return const CircularProgressIndicator();
+                        return const Center(
+                          child: SizedBox(
+                            width: 30,
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
                       }
                     }),
               ),

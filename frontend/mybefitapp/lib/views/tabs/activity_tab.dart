@@ -39,12 +39,8 @@ class _ActivityState extends State<Activity> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.8,
+      height: MediaQuery.of(context).size.height * 1.0,
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(25.0),
-          topRight: Radius.circular(25.0),
-        ),
         color: Styles.bgColor,
         border: Border.all(
           width: 1.0,

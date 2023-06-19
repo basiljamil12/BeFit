@@ -38,10 +38,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> refreshData() async {
     String email = AuthService.firebase().currentUser?.email.toString() ?? '';
-
-    DateTime now = DateTime.now().toUtc();
-    DateTime utcDate = DateTime.utc(now.year, now.month, now.day);
-
     _userData = BaseUserClient().getUserApi(email);
 
     await Future.delayed(const Duration(seconds: 1));
@@ -241,7 +237,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         UserModel jsonDataa =
                                             userModelFromJson(model);
                                         String name = jsonDataa.name;
-                                        String password = jsonDataa.password;
+                                        //String password = jsonDataa.password;
                                         String gender = jsonDataa.gender;
                                         String dob = jsonDataa.dob.toString();
 
@@ -258,26 +254,27 @@ class _ProfilePageState extends State<ProfilePage> {
                                         return Column(
                                           children: [
                                             const SizedBox(height: 10),
-                                            Container(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const Text(
-                                                    'Name:',
-                                                    style: TextStyle(
-                                                      fontSize: 15,
-                                                    ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                const Text(
+                                                  'Name:',
+                                                  style: TextStyle(
+                                                    fontSize: 15,
                                                   ),
-                                                  Text(
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
                                                     name,
                                                     style: const TextStyle(
                                                       fontSize: 15.0,
                                                     ),
+                                                    textAlign: TextAlign.right,
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
                                             const Divider(
                                               color: Colors.grey,
@@ -286,26 +283,28 @@ class _ProfilePageState extends State<ProfilePage> {
                                               endIndent: 0,
                                             ),
                                             const SizedBox(height: 10),
-                                            Container(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const Text(
-                                                    'Email:',
-                                                    style: TextStyle(
-                                                      fontSize: 15,
-                                                    ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  'Email:',
+                                                  style: TextStyle(
+                                                    fontSize: 15,
                                                   ),
-                                                  Text(
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
                                                     emailForScreen,
                                                     style: const TextStyle(
                                                       fontSize: 15,
                                                     ),
+                                                    textAlign: TextAlign.right,
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
                                             const Divider(
                                               color: Colors.grey,
@@ -314,54 +313,28 @@ class _ProfilePageState extends State<ProfilePage> {
                                               endIndent: 0,
                                             ),
                                             const SizedBox(height: 10),
-                                            Container(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const Text(
-                                                    'Password:',
-                                                    style: TextStyle(
-                                                      fontSize: 15,
-                                                    ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  'Gender:',
+                                                  style: TextStyle(
+                                                    fontSize: 15,
                                                   ),
-                                                  Text(
-                                                    password,
-                                                    style: const TextStyle(
-                                                      fontSize: 15.0,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            const Divider(
-                                              color: Colors.grey,
-                                              thickness: 1,
-                                              indent: 0,
-                                              endIndent: 0,
-                                            ),
-                                            const SizedBox(height: 10),
-                                            Container(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const Text(
-                                                    'Gender:',
-                                                    style: TextStyle(
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                  Text(
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
                                                     gender,
                                                     style: const TextStyle(
                                                       fontSize: 15.0,
                                                     ),
+                                                    textAlign: TextAlign.right,
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
                                             const Divider(
                                               color: Colors.grey,
@@ -370,26 +343,28 @@ class _ProfilePageState extends State<ProfilePage> {
                                               endIndent: 0,
                                             ),
                                             const SizedBox(height: 10),
-                                            Container(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const Text(
-                                                    'Age:',
-                                                    style: TextStyle(
-                                                      fontSize: 15,
-                                                    ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  'Age:',
+                                                  style: TextStyle(
+                                                    fontSize: 15,
                                                   ),
-                                                  Text(
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
                                                     ageInYears.toString(),
                                                     style: const TextStyle(
                                                       fontSize: 15.0,
                                                     ),
-                                                  )
-                                                ],
-                                              ),
+                                                    textAlign: TextAlign.right,
+                                                  ),
+                                                )
+                                              ],
                                             ),
                                             const SizedBox(height: 15),
                                             DecoratedBox(

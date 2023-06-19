@@ -44,16 +44,16 @@ class _AddBodyState extends State<AddBody> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,
       decoration: BoxDecoration(
-    borderRadius: const BorderRadius.only(
-      topLeft: Radius.circular(25.0),
-      topRight: Radius.circular(25.0),
-    ),
-    color: Styles.bgColor,
-    border: Border.all(
-      width: 1.0,
-      color: Colors.black,
-    ),
-  ),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
+        ),
+        color: Styles.bgColor,
+        border: Border.all(
+          width: 1.0,
+          color: Colors.black,
+        ),
+      ),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -166,17 +166,30 @@ class _AddBodyState extends State<AddBody> {
                         BodyModel body = createBodyModel();
                         var response = await BaseBodyClient()
                             .postBodyApi(body)
-                            .catchError((e) {});
+                            .catchError((e) {
+                          CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.error,
+                            confirmBtnColor: Colors.pinkAccent,
+                            text: e,
+                            onConfirmBtnTap: () {
+                              int count = 0;
+                              Navigator.of(context)
+                                  .popUntil((_) => count++ >= 2);
+                            },
+                          );
+                        });
                         if (response == null) return;
                         //DIALOG BOX THAT DISPLAYS 'SAVED'
                         CoolAlert.show(
                           context: context,
                           type: CoolAlertType.success,
                           confirmBtnColor: Colors.pinkAccent,
-                          text: "Information has been saved!",
+                          text: "Body Data has been saved!",
                           onConfirmBtnTap: () {
-                                    Navigator.of(context).pop();// Pops two screens
-                                  },
+                            int count = 0;
+                            Navigator.of(context).popUntil((_) => count++ >= 2);
+                          },
                         );
                       },
                       style: ElevatedButton.styleFrom(

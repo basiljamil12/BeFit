@@ -4,8 +4,8 @@ import 'package:sensors_plus/sensors_plus.dart';
 class StepTracker {
   int _steps = 0;
   AccelerometerEvent? _lastEvent;
-  final double _threshold = 20.0; // Adjust this value based on your needs
-  final double _upperthreshold = 50.0;
+  final double _threshold = 20.0;
+  final double _upperthreshold = 70.0;
   late StreamSubscription<AccelerometerEvent> _subscription;
 
   void startTracking() {

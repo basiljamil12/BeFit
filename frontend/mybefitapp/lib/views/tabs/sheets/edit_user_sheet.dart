@@ -66,9 +66,8 @@ class _EditUserState extends State<EditUser> {
                   if (snapshot.hasData) {
                     final model = snapshot.data!;
                     UserModel jsonDataa = userModelFromJson(model);
-                    String dob = jsonDataa.dob.toString();
                     String id = jsonDataa.id.toString();
-                    _dob.text = dob;
+                    //_dob.text = dob;
                     return Column(
                       children: [
                         Row(
@@ -246,8 +245,19 @@ class _EditUserState extends State<EditUser> {
                                     UserModel user = createUserModel();
                                     var response = await BaseUserClient()
                                         .putUserApi(user, id)
-                                        .catchError((e) {});
-                                        print(response);
+                                        .catchError((e) {
+                                      CoolAlert.show(
+                                        context: context,
+                                        type: CoolAlertType.error,
+                                        confirmBtnColor: Colors.pinkAccent,
+                                        text: e,
+                                        onConfirmBtnTap: () {
+                                          int count = 0;
+                                          Navigator.of(context)
+                                              .popUntil((_) => count++ >= 2);
+                                        },
+                                      );
+                                    });
                                     if (response == null) return;
                                     //DIALOG BOX THAT DISPLAYS 'SAVED'
                                     CoolAlert.show(
@@ -256,8 +266,8 @@ class _EditUserState extends State<EditUser> {
                                       confirmBtnColor: Colors.pinkAccent,
                                       text: "Information has been updated!",
                                       onConfirmBtnTap: () {
-                                    Navigator.of(context).pop();// Pops two screens
-                                  },
+                                        Navigator.of(context).pop();
+                                      },
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -284,7 +294,12 @@ class _EditUserState extends State<EditUser> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    return const CircularProgressIndicator();
+                    return const Center(
+                      child: SizedBox(
+                        width: 30,
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
                   }
                 })));
   }

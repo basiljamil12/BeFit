@@ -179,16 +179,30 @@ class _EditBodyState extends State<EditBody> {
                                 BodyModel body = createBodyModel();
                                 var response = await BaseBodyClient()
                                     .putBodyApi(body, id)
-                                    .catchError((e) {});
+                                    .catchError((e) {
+                                  CoolAlert.show(
+                                    context: context,
+                                    type: CoolAlertType.error,
+                                    confirmBtnColor: Colors.pinkAccent,
+                                    text: e,
+                                    onConfirmBtnTap: () {
+                                      int count = 0;
+                                      Navigator.of(context)
+                                          .popUntil((_) => count++ >= 2);
+                                    },
+                                  );
+                                });
                                 if (response == null) return;
 
                                 await CoolAlert.show(
                                   context: context,
                                   type: CoolAlertType.success,
                                   confirmBtnColor: Colors.pinkAccent,
-                                  text: "Information has been saved!",
+                                  text: "Body Data has been updated!",
                                   onConfirmBtnTap: () {
-                                    Navigator.of(context).pop();// Pops two screens
+                                    int count = 0;
+                                    Navigator.of(context)
+                                        .popUntil((_) => count++ >= 2);
                                   },
                                 );
                               },
@@ -216,7 +230,12 @@ class _EditBodyState extends State<EditBody> {
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else {
-                return const CircularProgressIndicator();
+                return const Center(
+                  child: SizedBox(
+                    width: 30,
+                    child: CircularProgressIndicator(),
+                  ),
+                );
               }
             }),
       ),

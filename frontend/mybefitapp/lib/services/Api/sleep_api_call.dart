@@ -39,7 +39,6 @@ class BaseSleepClient {
       'Content-Type': 'application/json',
     };
     var response = await client.put(uri, body: payload, headers: headers);
-    print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return response.body;
     } else {

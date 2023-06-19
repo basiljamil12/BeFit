@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mybefitapp/model/body_model.dart';
-import 'package:mybefitapp/services/Api/body_api_call.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/services/libraries/body_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
@@ -16,7 +15,6 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   late Future<dynamic> _bodyData;
-  int _editStep = 0;
   late final TextEditingController _height;
   late final TextEditingController _weight;
   String email = AuthService.firebase().currentUser?.email.toString() ?? '';
@@ -36,18 +34,6 @@ class _BodyState extends State<Body> {
     super.dispose();
   }
 
-  void _nextEdit() {
-    setState(() {
-      _editStep += 1;
-    });
-  }
-
-  void _previousEdit() {
-    setState(() {
-      _editStep -= 1;
-    });
-  }
-
   BodyModel createBodyModel() {
     String emailReal = email;
     int height = int.parse(_height.text);
@@ -59,18 +45,14 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.8,
+      height: MediaQuery.of(context).size.height * 1.0,
       decoration: BoxDecoration(
-    borderRadius: const BorderRadius.only(
-      topLeft: Radius.circular(25.0),
-      topRight: Radius.circular(25.0),
-    ),
-    color: Styles.bgColor,
-    border: Border.all(
-      width: 1.0,
-      color: Colors.black,
-    ),
-  ),
+        color: Styles.bgColor,
+        border: Border.all(
+          width: 1.0,
+          color: Colors.black,
+        ),
+      ),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -114,7 +96,6 @@ class _BodyState extends State<Body> {
                   BodyModel forBody = bodyModelFromJson(model);
                   int height = forBody.height;
                   int weight = forBody.weight;
-                  String id = forBody.id!;
                   String bmi = BodyClient().forBmi(height, weight).toString();
                   //REMINDER TO SELF: WORK FOR DISPLAYING BODY MEASUREMENTS HERE
                   return Column(
@@ -128,7 +109,7 @@ class _BodyState extends State<Body> {
                         width: 320,
                         child: Column(
                           children: [
-                            Text(
+                            const Text(
                               'Body Information',
                               style: TextStyle(
                                 fontSize: 20.0,
@@ -266,7 +247,6 @@ class _BodyState extends State<Body> {
                           ),
                         ),
                       ),
-                      
                     ],
                   );
                 } else if (snapshot.hasError) {

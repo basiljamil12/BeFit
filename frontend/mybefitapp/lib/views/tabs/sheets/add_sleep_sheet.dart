@@ -203,16 +203,29 @@ class _AddSleepState extends State<AddSleep> {
                         SleepModel sleep = createSleepModel();
                         var response = await BaseSleepClient()
                             .postSleepApi(sleep)
-                            .catchError((e) {});
+                            .catchError((e) {
+                          CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.error,
+                            confirmBtnColor: Colors.pinkAccent,
+                            text: e,
+                            onConfirmBtnTap: () {
+                              int count = 0;
+                              Navigator.of(context)
+                                  .popUntil((_) => count++ >= 2);
+                            },
+                          );
+                        });
                         if (response == null) return;
                         //DIALOG BOX THAT DISPLAYS 'SAVED'
                         CoolAlert.show(
                           context: context,
                           type: CoolAlertType.success,
                           confirmBtnColor: Colors.pinkAccent,
-                          text: "Information has been saved!",
+                          text: "Sleep Data has been saved!",
                           onConfirmBtnTap: () {
-                            Navigator.of(context).pop(); // Pops two screens
+                            int count = 0;
+                            Navigator.of(context).popUntil((_) => count++ >= 2);
                           },
                         );
                       },

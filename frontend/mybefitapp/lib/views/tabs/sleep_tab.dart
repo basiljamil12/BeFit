@@ -1,7 +1,5 @@
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:mybefitapp/main.dart';
 import 'package:mybefitapp/model/sleep_model.dart';
@@ -35,10 +33,6 @@ class _SleepState extends State<Sleep> {
     _sleepData = SleepClient().checkAndGetSleep(email);
   }
 
-  void alarminit() async {
-    await AndroidAlarmManager.initialize();
-  }
-
   String convertToAmPmFormat(String time) {
     DateFormat inputFormat =
         DateFormat.Hm(); // Input format: 24-hour format (e.g., 14:30)
@@ -54,12 +48,8 @@ class _SleepState extends State<Sleep> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.8,
+      height: MediaQuery.of(context).size.height * 1.0,
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(25.0),
-          topRight: Radius.circular(25.0),
-        ),
         color: Styles.bgColor,
         border: Border.all(
           width: 1.0,
@@ -129,7 +119,7 @@ class _SleepState extends State<Sleep> {
                         ),
                         width: 320,
                         child: Column(children: [
-                          Text(
+                          const Text(
                             'Sleep Schedule',
                             style: TextStyle(
                               fontSize: 20.0,
@@ -153,7 +143,7 @@ class _SleepState extends State<Sleep> {
                                     ),
                                     Text(
                                       convertToAmPmFormat(
-                                          '${starthour}:${startminute}'),
+                                          '$starthour:$startminute'),
                                       style: const TextStyle(
                                         fontSize: 15.0,
                                       ),
@@ -178,7 +168,7 @@ class _SleepState extends State<Sleep> {
                                     ),
                                     Text(
                                       convertToAmPmFormat(
-                                          '${endhour}:${endminute}'),
+                                          '$endhour:$endminute'),
                                       style: const TextStyle(
                                         fontSize: 15.0,
                                       ),
@@ -226,7 +216,7 @@ class _SleepState extends State<Sleep> {
                                       ),
                                     ),
                                     Text(
-                                      '$forQuality',
+                                      forQuality,
                                       style: const TextStyle(
                                         fontSize: 15.0,
                                       ),
@@ -250,27 +240,31 @@ class _SleepState extends State<Sleep> {
                                       ),
                                     ),
                                     ToggleSwitch(
-  customWidths: const [40.0, 50.0],
-  cornerRadius: 20.0,
-  activeBgColors: const [[Colors.red], [Colors.pink]],
-  activeFgColor: Colors.white,
-  inactiveBgColor: Colors.grey,
-  inactiveFgColor: Colors.white,
-  totalSwitches: 2,
-  labels: const ['', 'YES'],
-  icons: const [FontAwesomeIcons.xmark, null],
-  onToggle: (index) {
-    if (index == 1){
-      Notifications.scheduleOneTimeTimer(
-                                starthour.toString(),
-                                startminute.toString(),
-                                flutterLocalNotificationsPlugin);
-    }
-    else {
-      
-    }
-  },
-),
+                                      customWidths: const [50.0, 40.0],
+                                      cornerRadius: 20.0,
+                                      activeBgColors: const [
+                                        [Colors.pink],
+                                        [Colors.red]
+                                      ],
+                                      activeFgColor: Colors.white,
+                                      inactiveBgColor: Colors.grey,
+                                      inactiveFgColor: Colors.white,
+                                      totalSwitches: 2,
+                                      labels: const ['YES', ''],
+                                      icons: const [
+                                        null,
+                                        FontAwesomeIcons.xmark
+                                      ],
+                                      onToggle: (index) {
+                                        if (index == 0) {
+                                          Notifications.scheduleOneTimeTimer(
+                                              index!,
+                                              starthour.toString(),
+                                              startminute.toString(),
+                                              flutterLocalNotificationsPlugin);
+                                        } else {}
+                                      },
+                                    ),
                                   ],
                                 ),
                               ],
@@ -331,7 +325,6 @@ class _SleepState extends State<Sleep> {
                         ),
                       ),
                       const SizedBox(height: 10.0),
-                      
                     ],
                   );
                 } else if (snapshot.hasError) {

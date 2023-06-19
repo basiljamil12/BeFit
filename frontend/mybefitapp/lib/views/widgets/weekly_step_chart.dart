@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:mrx_charts/mrx_charts.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
@@ -23,6 +21,24 @@ class _WeekChartState extends State<WeekChart> {
     super.initState();
     //call step service here to get all steps
     _stepData = StepsClient().getAllStepData(email);
+  }
+
+  double getFreq(double max) {
+    if (max <= 1000) {
+      return 100.0;
+    } else if (max > 1000 && max <= 2000) {
+      return 200.0;
+    } else if (max > 3000 && max <= 3000) {
+      return 300.0;
+    } else if (max > 4000 && max <= 4000) {
+      return 400.0;
+    } else if (max > 5000 && max <= 5000) {
+      return 500.0;
+    } else if (max > 6000 && max <= 6000) {
+      return 600.0;
+    } else {
+      return 0.0;
+    }
   }
 
   @override
@@ -90,15 +106,20 @@ class _WeekChartState extends State<WeekChart> {
             ),
           ),
           y: ChartAxisSettingsAxis(
-            frequency: 100.0,
+            frequency: getFreq(dataList
+                .reduce((currentMax, element) =>
+                    currentMax is num && element is num
+                        ? (currentMax > element ? currentMax : element)
+                        : currentMax)
+                .toDouble()),
             max: check
-                ? 800.0
-                : dataList
+                ? dataList
                     .reduce((currentMax, element) =>
                         currentMax is num && element is num
                             ? (currentMax > element ? currentMax : element)
                             : currentMax)
-                    .toDouble(),
+                    .toDouble()
+                : 500.0,
             min: 0.0,
             textStyle: TextStyle(
               color: Colors.white.withOpacity(0.6),
