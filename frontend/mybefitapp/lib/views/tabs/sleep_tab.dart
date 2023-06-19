@@ -281,6 +281,40 @@ class _SleepState extends State<Sleep> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 10.0),
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(colors: [
+                            Colors.redAccent,
+                            Colors.pinkAccent,
+                          ]),
+                          borderRadius: BorderRadius.circular(20.0),
+                          boxShadow: const <BoxShadow>[
+                            BoxShadow(
+                              color: Color.fromRGBO(0, 0, 0, 0.30),
+                              blurRadius: 5,
+                            )
+                          ],
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Notifications.scheduleOneTimeTimer(const Duration(seconds: 2), flutterLocalNotificationsPlugin);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            disabledForegroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            minimumSize: const Size(100, 40),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                          child: const Text(
+                            'noti',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
                     ],
                   );
                 } else if (snapshot.hasError) {

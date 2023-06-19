@@ -48,6 +48,7 @@ dependencies:
   cool_alert: ^2.0.1
   flutter_local_notifications: ^14.1.1
   timezone: ^0.9.0
+  android_alarm_manager_plus: ^3.0.1
 
 
 dev_dependencies:
