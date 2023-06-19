@@ -11,6 +11,8 @@ import 'package:mybefitapp/utilities/app_styles.dart';
 import 'package:mybefitapp/utilities/notifications.dart';
 import 'package:mybefitapp/views/tabs/sheets/add_sleep_sheet.dart';
 import 'package:mybefitapp/views/tabs/sheets/edit_sleep_sheet.dart';
+import 'package:toggle_switch/toggle_switch.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Sleep extends StatefulWidget {
   const Sleep({super.key});
@@ -231,7 +233,46 @@ class _SleepState extends State<Sleep> {
                                     ),
                                   ],
                                 ),
+                                const Divider(
+                                  color: Colors.grey,
+                                  indent: 0,
+                                  endIndent: 0,
+                                ),
                                 const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      'Receive Reminder:',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    ToggleSwitch(
+  customWidths: const [40.0, 50.0],
+  cornerRadius: 20.0,
+  activeBgColors: const [[Colors.red], [Colors.pink]],
+  activeFgColor: Colors.white,
+  inactiveBgColor: Colors.grey,
+  inactiveFgColor: Colors.white,
+  totalSwitches: 2,
+  labels: const ['', 'YES'],
+  icons: const [FontAwesomeIcons.xmark, null],
+  onToggle: (index) {
+    if (index == 1){
+      Notifications.scheduleOneTimeTimer(
+                                starthour.toString(),
+                                startminute.toString(),
+                                flutterLocalNotificationsPlugin);
+    }
+    else {
+      
+    }
+  },
+),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
@@ -290,41 +331,7 @@ class _SleepState extends State<Sleep> {
                         ),
                       ),
                       const SizedBox(height: 10.0),
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(colors: [
-                            Colors.redAccent,
-                            Colors.pinkAccent,
-                          ]),
-                          borderRadius: BorderRadius.circular(20.0),
-                          boxShadow: const <BoxShadow>[
-                            BoxShadow(
-                              color: Color.fromRGBO(0, 0, 0, 0.30),
-                              blurRadius: 5,
-                            )
-                          ],
-                        ),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Notifications.scheduleOneTimeTimer(
-                                const Duration(seconds: 4),
-                                flutterLocalNotificationsPlugin);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            disabledForegroundColor: Colors.transparent,
-                            shadowColor: Colors.transparent,
-                            minimumSize: const Size(100, 40),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                          ),
-                          child: const Text(
-                            'noti',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                      ),
+                      
                     ],
                   );
                 } else if (snapshot.hasError) {
