@@ -1,5 +1,7 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:mybefitapp/main.dart';
 import 'package:mybefitapp/model/sleep_model.dart';
@@ -24,9 +26,15 @@ class _SleepState extends State<Sleep> {
   @override
   void initState() {
     super.initState();
-    Notifications.initialize(flutterLocalNotificationsPlugin);
+    //await AndroidAlarmManager.initialize();
+    //alarminit();
+    Notifications.initlize(flutterLocalNotificationsPlugin);
     //REMINDER TO SELF: INSTEAD OF TYPED EMAIL, USE VARIABLE WHEN WORKING ON DISPLAYING BODY MEASUREMENTS
     _sleepData = SleepClient().checkAndGetSleep(email);
+  }
+
+  void alarminit() async {
+    await AndroidAlarmManager.initialize();
   }
 
   String convertToAmPmFormat(String time) {
@@ -298,7 +306,9 @@ class _SleepState extends State<Sleep> {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            Notifications.scheduleOneTimeTimer(const Duration(seconds: 2), flutterLocalNotificationsPlugin);
+                            Notifications.scheduleOneTimeTimer(
+                                const Duration(seconds: 4),
+                                flutterLocalNotificationsPlugin);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,

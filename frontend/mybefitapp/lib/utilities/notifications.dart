@@ -1,16 +1,28 @@
-
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
-class Notifications{
-  static Future initialize(FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
-    const androidInitialize =  AndroidInitializationSettings('drawable/app_icon');
-    const initializationSettings = InitializationSettings(android: androidInitialize);
+class Notifications {
+  static Future initlize(
+      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
+    const androidInitialize =
+        AndroidInitializationSettings('mipmap/ic_launcher');
+    const initializationSettings =
+        InitializationSettings(android: androidInitialize);
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  static Future<void> scheduleOneTimeTimer(Duration scheduledTime, FlutterLocalNotificationsPlugin fln) async {
+  static Future<void> scheduleOneTimeTimer(
+      Duration scheduledTime, FlutterLocalNotificationsPlugin fln) async {
+    // Get the current timezone
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Karachi'));
+    final String timeZoneName = tz.local.name;
+
+    // Set the desired time for the notification
+    final Time notificationTime = Time(11, 36, 0); // 8:00 AM
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
       'check_app_notification',
@@ -20,24 +32,14 @@ class Notifications{
     );
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
-        print('a');
-
-    await AndroidAlarmManager.oneShot(
-      scheduledTime,
-      0, // Alarm ID
-      () async {
-         print('alarm go bzzzzzzzzz');
-        // Trigger the local notification
-        await fln.show(
-          0, // Notification ID
-          'Timer Expired', // Notification title
-          'Your time is up', // Notification body
-          platformChannelSpecifics,
-        );
-      },
-      exact: true,
-      wakeup: true,
-      rescheduleOnReboot: true,
+    await fln.zonedSchedule(
+      0, // Notification ID
+      'Notification Title',
+      'Notification Body',
+      tz.TZDateTime.now(tz.local).add(const Duration(minutes: 1)),
+      platformChannelSpecifics,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 }

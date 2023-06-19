@@ -1,3 +1,4 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mybefitapp/views/controlflow/main_redirect.dart';
@@ -11,7 +12,13 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  //alarminit();
   runApp(const MyApp());
+}
+
+void alarminit() async {
+  await AndroidAlarmManager.initialize();
 }
 
 class MyApp extends StatelessWidget {
