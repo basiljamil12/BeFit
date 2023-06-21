@@ -11,7 +11,7 @@ class WeekChart extends StatefulWidget {
 }
 
 class _WeekChartState extends State<WeekChart> {
-  List<dynamic> dataList = [];
+  List<dynamic> dataList = [0, 0];
   bool check = false;
   late Future<dynamic> _stepData;
   String email = AuthService.firebase().currentUser?.email.toString() ?? '';
@@ -37,7 +37,7 @@ class _WeekChartState extends State<WeekChart> {
     } else if (max > 6000 && max <= 6000) {
       return 600.0;
     } else {
-      return 0.0;
+      return 1.0;
     }
   }
 

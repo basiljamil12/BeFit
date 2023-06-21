@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:mybefitapp/model/body_model.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
@@ -5,6 +6,7 @@ import 'package:mybefitapp/services/libraries/body_service.dart';
 import 'package:mybefitapp/utilities/app_styles.dart';
 import 'package:mybefitapp/views/tabs/sheets/add_body_sheet.dart';
 import 'package:mybefitapp/views/tabs/sheets/edit_body_sheet.dart';
+import 'package:pretty_gauge/pretty_gauge.dart';
 
 class Body extends StatefulWidget {
   const Body({super.key});
@@ -18,6 +20,7 @@ class _BodyState extends State<Body> {
   late final TextEditingController _height;
   late final TextEditingController _weight;
   String email = AuthService.firebase().currentUser?.email.toString() ?? '';
+  bool showContainer = false;
 
   @override
   void initState() {
@@ -25,6 +28,12 @@ class _BodyState extends State<Body> {
     _weight = TextEditingController();
     super.initState();
     _bodyData = BodyClient().checkAndGetBody(email);
+
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        showContainer = true;
+      });
+    });
   }
 
   @override
@@ -188,10 +197,76 @@ class _BodyState extends State<Body> {
                                     ],
                                   ),
                                   const SizedBox(height: 10),
+                                  const Divider(
+                                    color: Colors.grey,
+                                    indent: 0,
+                                    endIndent: 0,
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        'Show Suggestions:',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          CoolAlert.show(
+                                            context: context,
+                                            type: CoolAlertType.info,
+                                            confirmBtnColor: Colors.pinkAccent,
+                                            text: BodyClient()
+                                                .getHealthSuggestion(
+                                                    double.parse(bmi)),
+                                          );
+                                        },
+                                        child: const Text(
+                                          'Click to View',
+                                          style: TextStyle(
+                                            fontSize: 15.0,
+                                            color: Colors.pinkAccent,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
                                 ],
                               ),
                             ),
                             const SizedBox(height: 10),
+                            Center(
+                              child: PrettyGauge(
+                                maxValue: 40,
+                                gaugeSize: 200,
+                                segments: [
+                                  GaugeSegment('Severe Thinness', 15,
+                                      const Color.fromARGB(255, 171, 30, 20)),
+                                  GaugeSegment('Moderate Thinness', 1,
+                                      Colors.pinkAccent),
+                                  GaugeSegment(
+                                      'Mild Thinness', 1.5, Colors.yellow),
+                                  GaugeSegment('Normal', 6.5, Colors.green),
+                                  GaugeSegment('Overweight', 5, Colors.yellow),
+                                  GaugeSegment(
+                                      'Obese Class I', 5, Colors.redAccent),
+                                  GaugeSegment(
+                                      'Obese Class II', 5, Colors.pink),
+                                  GaugeSegment('Obese Class III', 1,
+                                      const Color.fromARGB(255, 171, 30, 20)),
+                                ],
+                                currentValue: double.parse(bmi),
+                                showMarkers: true,
+                                needleColor: Colors.pink,
+                                displayWidget: Text(
+                                    BodyClient().classifyBMI(double.parse(bmi)),
+                                    style: const TextStyle(fontSize: 12)),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -252,7 +327,8 @@ class _BodyState extends State<Body> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-                  return Container(
+                  return showContainer
+            ? Container(
                     padding: const EdgeInsets.all(12.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
@@ -331,7 +407,12 @@ class _BodyState extends State<Body> {
                         ),
                       ],
                     ),
-                  );
+                  ) : const Center(
+              child: SizedBox(
+                width: 35,
+                child: CircularProgressIndicator(),
+              ),
+            );
                 }
               },
             ),

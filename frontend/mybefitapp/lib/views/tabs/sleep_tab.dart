@@ -22,6 +22,7 @@ class Sleep extends StatefulWidget {
 class _SleepState extends State<Sleep> {
   late Future<dynamic> _sleepData;
   String email = AuthService.firebase().currentUser?.email.toString() ?? '';
+  bool showContainer = false;
 
   @override
   void initState() {
@@ -31,6 +32,12 @@ class _SleepState extends State<Sleep> {
     Notifications.initlize(flutterLocalNotificationsPlugin);
     //REMINDER TO SELF: INSTEAD OF TYPED EMAIL, USE VARIABLE WHEN WORKING ON DISPLAYING BODY MEASUREMENTS
     _sleepData = SleepClient().checkAndGetSleep(email);
+
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        showContainer = true;
+      });
+    });
   }
 
   String convertToAmPmFormat(String time) {
@@ -330,86 +337,93 @@ class _SleepState extends State<Sleep> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-                  return Container(
-                    padding: const EdgeInsets.all(12.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      color: Colors.white,
-                    ),
-                    width: 320,
-                    child: Column(
-                      children: [
-                        const Icon(
-                          CupertinoIcons.bed_double_fill,
-                          color: Colors.pinkAccent,
-                          size: 100,
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Add Sleep Schedule',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        const Padding(
-                          padding: EdgeInsets.all(12.0),
-                          child: Text(
-                              'Your devices can help you get better sleep and understand your sleep patterns.'),
-                        ),
-                        const SizedBox(height: 15),
-                        DecoratedBox(
+                  return showContainer
+                      ? Container(
+                          padding: const EdgeInsets.all(12.0),
                           decoration: BoxDecoration(
-                            gradient: const LinearGradient(colors: [
-                              Colors.redAccent,
-                              Colors.pinkAccent,
-                            ]),
                             borderRadius: BorderRadius.circular(20.0),
-                            boxShadow: const <BoxShadow>[
-                              BoxShadow(
-                                color: Color.fromRGBO(0, 0, 0, 0.30),
-                                blurRadius: 5,
-                              )
-                            ],
+                            color: Colors.white,
                           ),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              showModalBottomSheet<void>(
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(25.0),
-                                    topRight: Radius.circular(25.0),
+                          width: 320,
+                          child: Column(
+                            children: [
+                              const Icon(
+                                CupertinoIcons.bed_double_fill,
+                                color: Colors.pinkAccent,
+                                size: 100,
+                              ),
+                              const SizedBox(height: 10),
+                              const Text(
+                                'Add Sleep Schedule',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              const Padding(
+                                padding: EdgeInsets.all(12.0),
+                                child: Text(
+                                    'Your devices can help you get better sleep and understand your sleep patterns.'),
+                              ),
+                              const SizedBox(height: 15),
+                              DecoratedBox(
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(colors: [
+                                    Colors.redAccent,
+                                    Colors.pinkAccent,
+                                  ]),
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  boxShadow: const <BoxShadow>[
+                                    BoxShadow(
+                                      color: Color.fromRGBO(0, 0, 0, 0.30),
+                                      blurRadius: 5,
+                                    )
+                                  ],
+                                ),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    showModalBottomSheet<void>(
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(25.0),
+                                          topRight: Radius.circular(25.0),
+                                        ),
+                                      ),
+                                      isScrollControlled: true,
+                                      useRootNavigator: true,
+                                      useSafeArea: true,
+                                      enableDrag: true,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const AddSleep();
+                                      },
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    disabledForegroundColor: Colors.transparent,
+                                    shadowColor: Colors.transparent,
+                                    minimumSize: const Size(100, 40),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Get Started',
+                                    style: TextStyle(fontSize: 20),
                                   ),
                                 ),
-                                isScrollControlled: true,
-                                useRootNavigator: true,
-                                useSafeArea: true,
-                                enableDrag: true,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const AddSleep();
-                                },
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              disabledForegroundColor: Colors.transparent,
-                              shadowColor: Colors.transparent,
-                              minimumSize: const Size(100, 40),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
                               ),
-                            ),
-                            child: const Text(
-                              'Get Started',
-                              style: TextStyle(fontSize: 20),
-                            ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  );
+                        )
+                      : const Center(
+                          child: SizedBox(
+                            width: 35,
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
                 }
               },
             ),

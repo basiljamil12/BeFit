@@ -51,6 +51,8 @@ dependencies:
   cron: ^0.5.1
   toggle_switch: ^2.1.0
   font_awesome_flutter: ^10.4.0
+  fl_chart: ^0.62.0
+  pretty_gauge: ^1.0.1
 
 
 dev_dependencies:

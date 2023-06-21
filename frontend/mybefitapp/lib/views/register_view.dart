@@ -1,8 +1,9 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:mybefitapp/model/user_model.dart';
 import 'package:mybefitapp/services/auth/auth_service.dart';
 import 'package:mybefitapp/utilities/constant_routes.dart';
-import '../services/Api/user_api_call.dart';
+import 'package:mybefitapp/services/Api/user_api_call.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -205,23 +206,15 @@ class _RegisterViewState extends State<RegisterView> {
                               if (isPasswordMatch()) {
                                 _nextStep();
                               } else {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text('Error'),
-                                    content: const Text(
-                                      'Passwords do not match!',
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('OK'),
-                                      ),
-                                    ],
-                                  ),
-                                );
+                                CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.error,
+                                      confirmBtnColor: Colors.pinkAccent,
+                                      text: "Passwords do not match!",
+                                      // onConfirmBtnTap: () {
+                                      //   Navigator.of(context).pop();
+                                      // },
+                                    );
                               }
                             },
                             style: ElevatedButton.styleFrom(
